@@ -45,4 +45,65 @@ ros2 run nmea_navsat_driver nmea_serial_driver --ros-args \
 
 sudo apt install ros-humble-rviz-2d-overlay-plugins
 
+sudo apt install ros-$ROS_DISTRO-rviz-satellite
+
+## 2026-08-31
+- **Issue identified**: GPS not showing in RViz - no connection between `base_link` and `gps` frame
+- **Root cause**: Missing `navsat_transform_node` to convert GPS lat/lon (NavSatFix) to UTM coordinates in map/odom frame
+- **Current state**: 
+  - GPS driver (`nmea_navsat_driver`) publishes `NavSatFix` in `gps` frame (URDF has `gps` link with fixed joint to `base_link`)
+  - EKF (`robot_localization`) only fuses odometry (`odom0: /odom_raw`) and IMU (`imu0: /imu/data`)
+  - No GPS fusion in EKF config - missing `pose0` for GPS data
+  - No `navsat_transform_node` to convert geographic → UTM coordinates
+- **Fix needed**:
+  1. Add `navsat_transform_node` to `gps.launch.py` to convert NavSatFix → Odometry in map frame
+  2. Add GPS pose input (`pose0`) to EKF config (`ekf.yaml`) 
+  3. Ensure frame IDs match: `navsat_transform` outputs to `odom` or `map`, EKF fuses it
+
+---
+
+## 2026-08-31
+- **Issue identified**: GPS not showing in RViz - no connection between `base_link` and `gps` frame
+- **Root cause**: Missing `navsat_transform_node` to convert GPS lat/lon (NavSatFix) to UTM coordinates in map/odom frame
+- **Current state**: 
+  - GPS driver (`nmea_navsat_driver`) publishes `NavSatFix` in `gps` frame (URDF has `gps` link with fixed joint to `base_link`)
+  - EKF (`robot_localization`) only fuses odometry (`odom0: /odom_raw`) and IMU (`imu0: /imu/data`)
+  - No GPS fusion in EKF config - missing `pose0` for GPS data
+  - No `navsat_transform_node` to convert geographic → UTM coordinates
+- **Fix needed**:
+  1. Add `navsat_transform_node` to `gps.launch.py` to convert NavSatFix → Odometry in map frame
+  2. Add GPS pose input (`pose0`) to EKF config (`ekf.yaml`) 
+  3. Ensure frame IDs match: `navsat_transform` outputs to `odom` or `map`, EKF fuses it
+
+### Fix Applied (2026-08-31)
+- **Created** `src/ugv_main/ugv_bringup/param/navsat_transform.yaml` - navsat_transform_node config
+- **Updated** `src/ugv_main/ugv_bringup/launch/gps.launch.py` - Added navsat_transform_node with proper remappings
+- **Updated** `src/ugv_main/ugv_bringup/param/ekf.yaml`:
+  - Added `map_frame: map` and changed `world_frame: map` (for GPS fusion)
+  - Added `pose0: /gps/filtered` with position-only config (x, y only)
+  - Added pose0 rejection thresholds for outlier filtering
+- **Updated** `src/ugv_main/ugv_bringup/param/gps.yaml` - Added optional GPS quality parameters
+- **Updated** `src/ugv_main/ugv_bringup/package.xml` - Added `robot_localization` exec_depend
+
+### Expected Transform Chain After Fix:
+```
+map (world_frame) 
+  └── odom (EKF output: odom->base_footprint)
+        └── base_footprint
+              └── base_link
+                    └── gps (fixed joint, 0.1 0 0.2 offset)
+
+navsat_transform_node:
+  - Input: /gps/fix (NavSatFix in 'gps' frame) + /imu/data + /odom
+  - Output: /gps/filtered (Odometry in 'map' frame)
+  - Broadcasts: UTM -> map transform
+
+EKF (world_frame: map):
+  - odom0: /odom_raw (continuous, relative) → fuses x, y, yaw, vx, vyaw
+  - imu0: /imu/data (yaw, vyaw)
+  - pose0: /gps/filtered (absolute position) → fuses x, y only
+```
+
+---
+
 *Log entries will be appended below as work progresses.*

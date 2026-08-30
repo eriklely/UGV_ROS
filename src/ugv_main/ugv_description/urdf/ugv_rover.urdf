@@ -62,6 +62,14 @@
       <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
+  <link name="gps"/>
+
+  <joint name="gps_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="gps"/>
+    <origin xyz="0.1 0 0.2" rpy="0 0 0"/>
+  </joint>
+
   <link
     name="left_up_wheel_link">
     <inertial>

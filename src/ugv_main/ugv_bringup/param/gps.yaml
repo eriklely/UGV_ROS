@@ -5,3 +5,7 @@
     frame_id: "gps"
     time_ref_source: "gps"
     useRMC: false
+    # Additional parameters for better GPS handling
+    # timeout: 5.0          # Serial read timeout
+    # check_fix: true       # Validate GPS fix quality
+    # min_satellites: 4     # Minimum satellites for valid fix

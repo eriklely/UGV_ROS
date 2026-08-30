@@ -5,19 +5,41 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    params = os.path.join(
+    gps_params = os.path.join(
         get_package_share_directory('ugv_bringup'),
         'param',
         'gps.yaml',
     )
+    
+    navsat_params = os.path.join(
+        get_package_share_directory('ugv_bringup'),
+        'param',
+        'navsat_transform.yaml',
+    )
 
     return LaunchDescription([
+        # GPS driver - publishes NavSatFix in 'gps' frame
         Node(
             package='nmea_navsat_driver',
             executable='nmea_serial_driver',
             name='nmea_serial_driver',
             namespace='gps',
             output='screen',
-            parameters=[params],
+            parameters=[gps_params],
+        ),
+        
+        # navsat_transform_node - converts NavSatFix (lat/lon) to Odometry in map/odom frame
+        Node(
+            package='robot_localization',
+            executable='navsat_transform_node',
+            name='navsat_transform',
+            output='screen',
+            parameters=[navsat_params],
+            remappings=[
+                ('/gps/fix', '/gps/fix'),           # NavSatFix input from GPS driver
+                ('/imu/data', '/imu/data'),         # IMU for heading
+                ('/odometry/filtered', '/odom'),    # Odometry input (EKF output remapped to /odom)
+                ('/gps/filtered', '/gps/filtered'), # Output: Odometry in map frame
+            ],
         ),
     ])
