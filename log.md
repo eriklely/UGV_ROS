@@ -43,4 +43,6 @@ ros2 run nmea_navsat_driver nmea_serial_driver --ros-args \
   -r heading:=/gps/heading \
   -r time_reference:=/gps/time_reference
 
+sudo apt install ros-humble-rviz-2d-overlay-plugins
+
 *Log entries will be appended below as work progresses.*
