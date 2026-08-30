@@ -80,10 +80,10 @@ def generate_launch_description():
         )
     )
     # Define the nodes to be launched
-    driver_node = Node(
-        package='ugv_bringup',
-        executable='ugv_driver',
-    )
+    #driver_node = Node(
+    #    package='ugv_bringup',
+    #    executable='ugv_driver',
+    #)
     # Define the nodes to be launched
     base_node = Node(
         package='ugv_base_node',
