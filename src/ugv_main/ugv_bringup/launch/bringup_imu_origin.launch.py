@@ -44,6 +44,11 @@ def generate_launch_description():
         package='ugv_bringup',
         executable='ugv_bringup',
     )
+    voltage_overlay_node = Node(
+        package='ugv_bringup',
+        executable='voltage_overlay',
+        output='screen',
+    )    
     # Define the base node with parameters
     imu_complementary_filter_node = Node(
             package='imu_complementary_filter',

@@ -34,6 +34,11 @@ def generate_launch_description():
         package='ugv_bringup',
         executable='ugv_bringup',
     )
+    voltage_overlay_node = Node(
+        package='ugv_bringup',
+        executable='voltage_overlay',
+        output='screen',
+    )    
     # Include the robot state launch from the ugv_description package
     robot_state_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
