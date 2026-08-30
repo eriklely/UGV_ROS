@@ -60,6 +60,11 @@ Visualization Manager:
         Value: /ugv/robot_description
       Enabled: true
       Links:
+        3d_camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
@@ -70,10 +75,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
         base_imu_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        base_lidar_frame:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -97,17 +98,12 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        oak-d-base-frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         pt_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        pt_cameral_link:
+        pt_camera_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -222,5 +218,5 @@ Window Geometry:
   Views:
     collapsed: false
   Width: 1200
-  X: 2844
-  Y: 574
+  X: 2561
+  Y: 559
