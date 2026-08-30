@@ -96,6 +96,7 @@ def generate_launch_description():
         imu_complementary_filter_node,
         #imu_filter_node,
         laser_bringup_launch,
+        voltage_overlay_node,        
         driver_node,
         base_node
     ])
