@@ -45,6 +45,12 @@ def generate_launch_description():
         executable='ugv_driver',
     )
 
+    voltage_overlay_node = Node(
+        package='ugv_bringup',
+        executable='voltage_overlay',
+        output='screen',
+    )
+
     # Include laser lidar launch file
     laser_bringup_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
