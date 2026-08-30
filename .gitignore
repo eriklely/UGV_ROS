@@ -1,0 +1,14 @@
+build/
+install/
+log/
+*.pyc
+__pycache__/
+.vscode/
+core
+**/core
+core.*
+build/
+install/
+log/
+*.bag
+*.bag.active
