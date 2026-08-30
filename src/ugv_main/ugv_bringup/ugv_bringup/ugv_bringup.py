@@ -8,7 +8,7 @@ import logging
 import time
 from std_msgs.msg import Header, Float32MultiArray, Float32
 from geometry_msgs.msg import Twist
-from sensor_msgs.msg import Imu, MagneticField
+from sensor_msgs.msg import Imu, MagneticField, JointState
 import math
 
 # Helper class for reading lines from a serial port
