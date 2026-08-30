@@ -99,6 +99,9 @@ class ugv_bringup(Node):
         self.base_controller = BaseController('/dev/ttyAMA0', 115200)
         # Timer to periodically execute the feedback loop
         self.feedback_timer = self.create_timer(0.001, self.feedback_loop)
+        self.create_subscription(Twist, 'cmd_vel', self.cmd_vel_callback, 10)
+        self.create_subscription(JointState, 'joint_commands', self.joint_states_callback, 10)
+        self.create_subscription(Float32MultiArray, 'led_ctrl', self.led_ctrl_callback, 10)
 
     # Main loop for reading sensor feedback and publishing it to ROS topics
     def feedback_loop(self):
@@ -156,7 +159,45 @@ class ugv_bringup(Node):
         msg = Float32()
         msg.data = float(voltage_data["v"])/100
         self.voltage_publisher_.publish(msg)  # Publish the voltage data
-                        
+
+    def cmd_vel_callback(self, msg):
+        linear_velocity = msg.linear.x
+        angular_velocity = msg.angular.z
+        epsilon = 1e-6
+        if abs(linear_velocity) < epsilon:
+            if 0 < angular_velocity < 0.2:
+                angular_velocity = 0.2
+            elif -0.2 < angular_velocity < 0:
+                angular_velocity = -0.2
+        self.base_controller.send_command({
+            'T': '13',
+            'X': linear_velocity,
+            'Z': angular_velocity,
+        })
+
+    def joint_states_callback(self, msg):
+        try:
+            x_rad = msg.position[msg.name.index('pt_base_link_to_pt_link1')]
+            y_rad = msg.position[msg.name.index('pt_link1_to_pt_link2')]
+        except ValueError:
+            return
+        self.base_controller.send_command({
+            'T': 134,
+            'X': (180 * x_rad) / 3.1415926,
+            'Y': (180 * y_rad) / 3.1415926,
+            'SX': 600,
+            'SY': 600,
+        })
+
+    def led_ctrl_callback(self, msg):
+        if len(msg.data) < 2:
+            return
+        self.base_controller.send_command({
+            'T': 132,
+            'IO4': msg.data[0],
+            'IO5': msg.data[1],
+        })
+
 # Main function to initialize the ROS node and start spinning
 def main(args=None):
     rclpy.init(args=args)  # Initialize ROS
