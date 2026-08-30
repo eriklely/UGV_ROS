@@ -108,6 +108,7 @@ def generate_launch_description():
         bringup_node,
         imu_complementary_filter_node,
         #imu_filter_node,
+        gps_bringup_launch,
         laser_bringup_launch,
         driver_node,
         base_node,
