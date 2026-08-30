@@ -82,5 +82,6 @@ def generate_launch_description():
         driver_node,
         laser_bringup_launch,
         rf2o_laser_odometry_launch,
+        voltage_overlay_node,
         base_node
     ])
