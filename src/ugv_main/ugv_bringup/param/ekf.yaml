@@ -73,7 +73,7 @@ ekf_filter_node:
         map_frame: map                   # Fixed world frame for GPS fusion
         odom_frame: odom                 # Defaults to "odom" if unspecified
         base_link_frame: base_footprint  # Defaults to "base_link" if unspecified
-        world_frame: map                 # Use map_frame for GPS fusion (global absolute position)
+        world_frame: odom                 # Use map_frame for GPS fusion (global absolute position)
 
 # The filter accepts an arbitrary number of inputs from each input message type (nav_msgs/Odometry,
 # geometry_msgs/PoseWithCovarianceStamped, geometry_msgs/TwistWithCovarianceStamped,
