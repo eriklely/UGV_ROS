@@ -1,0 +1,26 @@
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "/run/user/1000/pulse/native" to rootfs at "/run/user/1000/pulse/native": mount src=/run/user/1000/pulse/native, dst=/run/user/1000/pulse/native, dstFd=/proc/thread-self/fd/15, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+failed to start containers: ugv_rpi_ros_humble
+Error response from daemon: container f64bd7e1c354dae7b6e6f4db545c49994f887a538eaf86fd04ba662be141c937 is not running
+Starting ugv_rpi_ros_humble...
+ugv_rpi_ros_humble
+Started. SSH service requested inside container.
+Starting ugv_rpi_ros_humble...
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "/run/user/1000/pulse/native" to rootfs at "/run/user/1000/pulse/native": mount src=/run/user/1000/pulse/native, dst=/run/user/1000/pulse/native, dstFd=/proc/thread-self/fd/15, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+failed to start containers: ugv_rpi_ros_humble
+Starting ugv_rpi_ros_humble...
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "/run/user/1000/pulse/native" to rootfs at "/run/user/1000/pulse/native": mount src=/run/user/1000/pulse/native, dst=/run/user/1000/pulse/native, dstFd=/proc/thread-self/fd/15, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+failed to start containers: ugv_rpi_ros_humble
+Starting ugv_rpi_ros_humble...
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "/run/user/1000/pulse/native" to rootfs at "/run/user/1000/pulse/native": mount src=/run/user/1000/pulse/native, dst=/run/user/1000/pulse/native, dstFd=/proc/thread-self/fd/15, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+failed to start containers: ugv_rpi_ros_humble
+Starting ugv_rpi_ros_humble...
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "/run/user/1000/pulse/native" to rootfs at "/run/user/1000/pulse/native": mount src=/run/user/1000/pulse/native, dst=/run/user/1000/pulse/native, dstFd=/proc/thread-self/fd/15, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+failed to start containers: ugv_rpi_ros_humble
+Starting ugv_rpi_ros_humble...
+Error response from daemon: failed to create task for container: failed to create shim task: OCI runtime create failed: runc create failed: unable to start container process: error during container init: error mounting "/run/user/1000/pulse/native" to rootfs at "/run/user/1000/pulse/native": mount src=/run/user/1000/pulse/native, dst=/run/user/1000/pulse/native, dstFd=/proc/thread-self/fd/15, flags=MS_BIND|MS_REC: not a directory: Are you trying to mount a directory onto a file (or vice-versa)? Check if the specified host path exists and is the expected type
+failed to start containers: ugv_rpi_ros_humble
+Starting ugv_rpi_ros_humble...
+ugv_rpi_ros_humble
+ * Starting OpenBSD Secure Shell server sshd
+   ...done.
+Started. SSH service requested inside container.
