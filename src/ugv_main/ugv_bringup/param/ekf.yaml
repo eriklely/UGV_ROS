@@ -162,23 +162,23 @@ ekf_filter_node:
 
 # GPS input from navsat_transform_node (absolute position in map frame)
 # This fuses global position data (subject to discrete jumps) - world_frame should be map_frame
-        pose0: /gps/filtered
-        pose0_config: [true, true, false,
-                       false, false, false,
-                       false, false, false,
-                       false, false, false,
+#        pose0: /gps/filtered
+#        pose0_config: [true, true, false,
+#                       false, false, false,
+#                       false, false, false,
+#                       false, false, false,
                        false, false, false]
         #        [x_pos   , y_pos    , z_pos,
         #         roll    , pitch    , yaw,
         #         x_vel   , y_vel    , z_vel,
         #         roll_vel, pitch_vel, yaw_vel,
         #         x_accel , y_accel  , z_accel]
-        pose0_nodelay: false
-        pose0_differential: false
-        pose0_relative: false
-        pose0_queue_size: 10
-        pose0_pose_rejection_threshold: 50.0
-        pose0_twist_rejection_threshold: 10.0
+#        pose0_nodelay: false
+#        pose0_differential: false
+#        pose0_relative: false
+#        pose0_queue_size: 10
+#        pose0_pose_rejection_threshold: 50.0
+#        pose0_twist_rejection_threshold: 10.0
 
 # [ADVANCED]  The EKF and UKF models follow a standard predict/correct cycle. During prediction, if there is no
 # acceleration reference, the velocity at time t+1 is simply predicted to be the same as the velocity at time t. During
