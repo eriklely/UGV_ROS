@@ -32,4 +32,3 @@ def generate_launch_description():
         joy_node,
         joy_ctrl_node
     ])
-

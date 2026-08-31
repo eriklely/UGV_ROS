@@ -39,7 +39,7 @@ def generate_launch_description():
             parameters=[{
                 'xspeed_limit': 0.5,
                 'angular_speed_limit': 5.0,
-                'connect': LaunchConfiguration('connect'),
+                'connect': LaunchConfiguration('connect'),   # ← this line is important
             }]
         ),
     ])
