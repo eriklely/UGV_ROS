@@ -40,10 +40,10 @@ def generate_launch_description():
         executable='ugv_bringup',
     )
 
-    driver_node = Node(
-        package='ugv_bringup',
-        executable='ugv_driver',
-    )
+    #driver_node = Node(
+    #    package='ugv_bringup',
+    #    executable='ugv_driver',
+    #)
 
     voltage_overlay_node = Node(
         package='ugv_bringup',
