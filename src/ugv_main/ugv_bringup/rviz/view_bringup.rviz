@@ -5,13 +5,8 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Status1
-        - /RobotModel1
         - /Voltage1/Topic1
         - /LaserScan1/Topic1
-        - /AerialMap1
-        - /AerialMap1/Status1
-        - /AerialMap1/Topic1
       Splitter Ratio: 0.2660406827926636
     Tree Height: 1078
   - Class: rviz_common/Selection
@@ -189,9 +184,9 @@ Visualization Manager:
       Enabled: true
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 251
+      Max Intensity: 247
       Min Color: 0; 0; 0
-      Min Intensity: 33
+      Min Intensity: 29
       Name: LaserScan
       Position Transformer: XYZ
       Selectable: true
@@ -208,27 +203,10 @@ Visualization Manager:
       Use Fixed Frame: true
       Use rainbow: true
       Value: true
-    - Alpha: 0.699999988079071
-      Blocks: 3
-      Class: rviz_satellite/AerialMap
-      Draw Behind: true
-      Enabled: true
-      Name: AerialMap
-      Object URI: https://tile.openstreetmap.org/{z}/{x}/{y}.png
-      TF tolerance: 0.10000000149011612
-      Timeout: 3
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /gps/fix
-      Value: true
-      Zoom: 18
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: map
+    Fixed Frame: odom
     Frame Rate: 30
   Name: root
   Tools:
@@ -308,4 +286,4 @@ Window Geometry:
     collapsed: false
   Width: 2560
   X: 1920
-  Y: 23
+  Y: 31
