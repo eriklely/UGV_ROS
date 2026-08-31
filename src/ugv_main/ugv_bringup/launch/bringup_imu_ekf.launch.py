@@ -105,6 +105,15 @@ def generate_launch_description():
         remappings=[('/odometry/filtered', '/odom')]
     )
 
+    ekf_map_node = Node(
+        package='robot_localization',
+        executable='ekf_node',
+        name='ekf_filter_node_map',
+        output='screen',
+        parameters=[os.path.join(get_package_share_directory("ugv_bringup"), 'param', 'ekf_gps.yaml')],
+        remappings=[('/odometry/filtered', '/odometry/filtered_map')]
+    )    
+
     return LaunchDescription([
         pub_odom_tf_arg,
         use_rviz_arg,
@@ -118,6 +127,7 @@ def generate_launch_description():
         voltage_overlay_node,
         #driver_node,
         base_node,
-        ekf_node
+        ekf_node,
+        ekf_map_node
     ])
 

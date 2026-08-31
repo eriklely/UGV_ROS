@@ -36,10 +36,9 @@ def generate_launch_description():
             output='screen',
             parameters=[navsat_params],
             remappings=[
-                ('/gps/fix', '/gps/fix'),           # NavSatFix input from GPS driver
-                ('/imu/data', '/imu/data'),         # IMU for heading
-                ('/odometry/filtered', '/odom'),    # Odometry input (EKF output remapped to /odom)
-                ('/gps/filtered', '/gps/filtered'), # Output: Odometry in map frame
+                ('gps/fix', '/gps/fix'),
+                ('imu', '/imu/data'),
+                ('odometry/filtered', '/odom'),
             ],
         ),
     ])

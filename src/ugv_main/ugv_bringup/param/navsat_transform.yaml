@@ -1,35 +1,12 @@
 ### navsat_transform config file ###
 navsat_transform_node:
-    ros__parameters:
-        # Frame IDs
-        map_frame: "map"              # Fixed world frame (map or odom)
-        base_link_frame: "base_footprint"  # Robot base frame
-        utm_zone: ""                  # UTM zone (empty = auto-detect from first GPS fix)
-
-        # Input topics (already remapped in launch file)
-        # gps/fix: NavSatFix input (from nmea_navsat_driver)
-        # imu/data: IMU for heading (yaw)
-        # odometry/filtered: Odometry for initialization (from EKF)
-
-        # Output topic
-        # gps/filtered: Odometry output in map frame
-
-        # Coordinate transformation
-        publish_filtered_gps: true    # Publish filtered GPS as Odometry
-        broadcast_utm_transform: true # Broadcast UTM → map transform
-        
-        # GPS message handling
-        use_odometry_yaw: true        # Use yaw from odometry instead of IMU
-        wait_for_datum: false         # Don't wait for datum service call (auto from first fix)
-        
-        # Filtering
-        gps_fix_timeout: 1.0          # Timeout for GPS fix
-        gps_min_satellites: 4         # Minimum satellites for valid fix
-        gps_max_hdop: 2.0             # Maximum HDOP for valid fix
-        
-        # Datum (set automatically from first GPS fix if not specified)
-        # datum: [latitude, longitude, altitude, yaw]
-        # datum: [52.0, 4.0, 0.0, 0.0]  # Example: Amsterdam
-        
-        # Zero altitude if GPS doesn't provide reliable altitude
-        zero_altitude: true
+  ros__parameters:
+    frequency: 10.0
+    delay: 3.0
+    magnetic_declination_radians: 0.0349
+    yaw_offset: 0.0
+    zero_altitude: true
+    publish_filtered_gps: true
+    broadcast_utm_transform: false
+    use_odometry_yaw: true
+    wait_for_datum: false
