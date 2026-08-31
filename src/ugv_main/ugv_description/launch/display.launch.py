@@ -66,6 +66,10 @@ def launch_setup(context, *args, **kwargs):
         executable='joint_state_publisher_gui',
         namespace='ugv',
         name='joint_state_publisher_gui',
+        parameters=[{
+            'source_list': ['/joint_commands'],  # absolute: joy publishes outside ns
+            'rate': 30,
+        }],        
         arguments=[urdf_model_path],
         condition=IfCondition(use_joint_state_publisher_gui)
     )
@@ -76,6 +80,10 @@ def launch_setup(context, *args, **kwargs):
         executable='joint_state_publisher',
         namespace='ugv',
         name='joint_state_publisher',
+        parameters=[{
+            'source_list': ['/joint_commands'],  # absolute: joy publishes outside ns
+            'rate': 30,
+        }],        
         arguments=[urdf_model_path],
         condition=UnlessCondition(use_joint_state_publisher_gui)
     )
