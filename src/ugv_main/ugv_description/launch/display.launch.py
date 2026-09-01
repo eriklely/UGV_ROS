@@ -67,7 +67,7 @@ def launch_setup(context, *args, **kwargs):
         namespace='ugv',
         name='joint_state_publisher_gui',
         parameters=[{
-            'source_list': ['/joint_commands'],  # absolute: joy publishes outside ns
+            'source_list': ['/joint_states'],  # telemetry feedback from baseboard node
             'rate': 30,
         }],        
         arguments=[urdf_model_path],
@@ -81,7 +81,7 @@ def launch_setup(context, *args, **kwargs):
         namespace='ugv',
         name='joint_state_publisher',
         parameters=[{
-            'source_list': ['/joint_commands'],  # absolute: joy publishes outside ns
+            'source_list': ['/joint_states'],  # telemetry feedback from baseboard node
             'rate': 30,
         }],        
         arguments=[urdf_model_path],
