@@ -106,6 +106,7 @@ class RpiTemperaturePublisher(Node):
                     f'Raspberry Pi CPU temperature critical: {temperature_c:.1f} °C'
                 )
                 self._last_critical_log_time = now
+                self._last_warn_log_time = now
             return
 
         if temperature_c >= warn_threshold_c:
