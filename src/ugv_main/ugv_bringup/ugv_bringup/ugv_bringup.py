@@ -104,7 +104,7 @@ class ugv_bringup(Node):
         # Initialize the base controller with the UART port and baud rate
         self.base_controller = BaseController('/dev/ttyAMA0', 115200)
         # Timer to periodically execute the feedback loop
-        self.feedback_timer = self.create_timer(0.05, self.feedback_loop)
+        self.feedback_timer = self.create_timer(0.1, self.feedback_loop)
         self.create_subscription(Twist, 'cmd_vel', self.cmd_vel_callback, 10)
         self.create_subscription(JointState, 'joint_commands', self.joint_states_callback, 10)
         self.create_subscription(Float32MultiArray, 'led_ctrl', self.led_ctrl_callback, 10)
