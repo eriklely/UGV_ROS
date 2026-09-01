@@ -31,7 +31,6 @@ install(DIRECTORY
 install(PROGRAMS
   scripts/server.py
   scripts/service_handler.py
-  scripts/rosapi_launch.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
