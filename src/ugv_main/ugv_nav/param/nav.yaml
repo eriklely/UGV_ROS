@@ -1,0 +1,35 @@
+timing:
+  controller_frequency: 10.0          # Hz, cmd_vel loop
+  bt_loop_duration: 100               # ms = 10 Hz BT tick
+  expected_planner_frequency: 1.0     # warning only, not replan rate
+  cycle_frequency: 10.0               # recoveries / behavior server
+  local_costmap:
+    update_frequency: 8.0
+    publish_frequency: 5.0            # RViz only
+  global_costmap:
+    update_frequency: 3.0
+    publish_frequency: 2.0            # RViz only
+
+robot:
+  radius: 0.1                         # costmaps + TEB footprint_model.radius
+  transform_tolerance: 0.3            # pick one value and use it everywhere
+
+motion:
+  max_vel_x: 0.26
+  max_vel_theta: 1.0                  # TEB is 1.0, DWA is 0.5 in your files
+  acc_lim_x: 2.5
+  acc_lim_theta: 3.2
+
+goal:
+  xy_tolerance: 0.25
+  yaw_tolerance: 0.25
+
+costmap:
+  resolution: 0.05
+  local_width: 5.0
+  local_height: 5.0
+  inflation_radius_local: 0.55
+  inflation_radius_global: 0.3
+  cost_scaling_factor: 3.0
+  obstacle_max_range: 2.5
+  raytrace_max_range: 3.0

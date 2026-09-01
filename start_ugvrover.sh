@@ -140,13 +140,9 @@ main_menu() {
         
         # Check workspace
         check_workspace
-        
-        echo -e "${BOLD}Main Categories:${NC}"
-        echo ""
-        
+
         print_category "�  LAPTOP/DESKTOP (External Device)"
         print_item "1" "description_display" "Robot description + RViz (slam_2d config)"
-        print_footer
         
         print_category "🚗  BRINGUP & DRIVERS (Real Robot)"
         print_item "2" "bringup_lidar" "Start LiDAR + robot description + RViz"
@@ -156,44 +152,37 @@ main_menu() {
         print_item "6" "keyboard_ctrl" "Keyboard teleop control"
         print_item "7" "joy_ctrl" "Joystick teleop control"
         print_item "8" "behavior_ctrl" "Behavior/command control"
-        print_footer
         
         print_category "🌍  GAZEBO SIMULATION"
         print_item "9" "gazebo_display" "Display robot model in Gazebo (select model)"
         print_item "10" "gazebo_bringup" "Full Gazebo simulation with house world"
         print_item "11" "gazebo_bringup_test" "Gazebo empty world for testing"
-        print_footer
         
         print_category "🗺️  SLAM (Mapping)"
         print_item "12" "slam_gmapping" "Gmapping 2D SLAM (laser only)"
         print_item "13" "slam_cartographer" "Cartographer 2D SLAM"
         print_item "14" "slam_rtabmap_rgbd" "RTAB-Map 3D SLAM (RGB-D camera)"
-        print_footer
         
         print_category "🧭  NAVIGATION (Requires Map)"
         print_item "15" "nav_amcl" "Nav2 with AMCL localization (DWA/TEB)"
         print_item "16" "nav_emcl" "Nav2 with EMCL localization"
         print_item "17" "nav_cartographer" "Nav2 with Cartographer localization"
         print_item "18" "nav_rtabmap" "Nav2 with RTAB-Map localization"
-        print_footer
         
         print_category "🔄  SLAM + NAVIGATION COMBINED"
         print_item "19" "gazebo_slam_nav" "Gazebo: SLAM + Nav combined"
         print_item "20" "slam_nav" "Real robot: SLAM + Nav combined"
-        print_footer
         
         print_category "👁️  VISION & PERCEPTION"
         print_item "21" "camera_usb" "USB camera driver"
         print_item "22" "camera_oak_d_lite" "OAK-D Lite depth camera"
         print_item "23" "camera_stereo" "Stereo camera (OAK-D)"
         print_item "24" "apriltag_track" "AprilTag detection + tracking"
-        print_footer
         
         print_category "🌐  WEB INTERFACE & VISUALIZATION"
         print_item "25" "web_app" "Vizanti web interface (port 5000)"
         print_item "26" "vizanti_server" "Vizanti ROS2 server"
         print_item "27" "vizanti_rws" "Vizanti RWS backend"
-        print_footer
         
         print_category "📡  LIDAR DRIVERS (Standalone)"
         print_item "28" "ldlidar_auto" "Auto-detect LiDAR model"
@@ -201,13 +190,11 @@ main_menu() {
         print_item "30" "ldlidar_ld19" "LD19 LiDAR"
         print_item "31" "ldlidar_stl27l" "STL-27L LiDAR"
         print_item "32" "ldlidar_viewer" "LiDAR RViz viewer"
-        print_footer
         
         print_category "🔧  UTILITIES & TOOLS"
         print_item "33" "explore_lite" "Autonomous exploration"
         print_item "34" "emcl2_localization" "EMCL2 Monte Carlo localization"
         print_item "35" "robot_pose_publisher" "Robot pose publisher"
-        print_footer
         
         print_category "⚙️  SETTINGS"
         print_item "M" "Change UGV Model" "Current: ${UGV_MODEL:-ugv_rover}"
@@ -215,7 +202,6 @@ main_menu() {
         print_item "R" "Toggle RViz" "Current: ${USE_RVIZ:-false}"
         print_item "S" "Source Workspace" "Re-source install/setup.bash"
         print_item "Q" "Quit" "Exit launcher"
-        print_footer
         
         read -p "Select option: " choice
         echo ""
@@ -224,7 +210,7 @@ main_menu() {
             # Laptop/Desktop
             1) 
                 select_rviz
-                run_launch "ugv_description" "display.launch.py" "use_rviz:=$USE_RVIZ rviz_config:=slam_2d"
+                run_launch "ugv_description" "display.launch.py" "use_rviz:=true rviz_config:=slam_2d"
                 ;;
             
             # Bringup & Drivers
