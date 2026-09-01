@@ -1,6 +1,6 @@
 timing:
   controller_frequency: 10.0          # Hz, cmd_vel loop
-  bt_loop_duration: 100               # ms = 10 Hz BT tick
+  bt_loop_duration: 1000               # ms = 10 Hz BT tick
   expected_planner_frequency: 1.0     # warning only, not replan rate
   cycle_frequency: 10.0               # recoveries / behavior server
   local_costmap:
