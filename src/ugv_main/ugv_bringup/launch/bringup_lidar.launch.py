@@ -51,6 +51,12 @@ def generate_launch_description():
         output='screen',
     )
 
+    rpi_temperature_node = Node(
+        package='ugv_bringup',
+        executable='rpi_temperature',
+        output='screen',
+    )
+
     # Include laser lidar launch file
     laser_bringup_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -83,5 +89,6 @@ def generate_launch_description():
         laser_bringup_launch,
         rf2o_laser_odometry_launch,
         voltage_overlay_node,
+        rpi_temperature_node,
         base_node
     ])

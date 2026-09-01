@@ -28,6 +28,7 @@ setup(
             'ugv_bringup = ugv_bringup.ugv_bringup:main',
             'ugv_driver = ugv_bringup.ugv_driver:main',
             'voltage_overlay = ugv_bringup.voltage_overlay:main',
+            'rpi_temperature = ugv_bringup.rpi_temperature:main',
         ],
     },
 )
