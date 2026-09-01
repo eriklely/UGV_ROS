@@ -34,7 +34,7 @@ class TemperatureOverlay(Node):
         t.width = 220
         t.height = 60
         t.horizontal_distance = 10
-        t.vertical_distance = 80
+        t.vertical_distance = 10
         t.horizontal_alignment = OverlayText.RIGHT
         t.vertical_alignment = OverlayText.TOP
         t.text_size = 16.0
