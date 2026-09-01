@@ -35,7 +35,7 @@ class TemperatureOverlay(Node):
         t.height = 60
         t.horizontal_distance = 10
         t.vertical_distance = 80
-        t.horizontal_alignment = OverlayText.LEFT
+        t.horizontal_alignment = OverlayText.RIGHT
         t.vertical_alignment = OverlayText.TOP
         t.text_size = 16.0
         cls._set_fg_color(t, temperature_c)
