@@ -82,7 +82,7 @@ def generate_launch_description():
     return launch.LaunchDescription([
         rosbridge_node,
         rosapi_node,
-        rosapi_launch_node,
+        #rosapi_launch_node,
         flask_node,
         tf_handler_node,
         service_handler_node
