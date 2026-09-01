@@ -61,8 +61,8 @@ class BaseController:
             self.data_buffer = json.loads(line)  # Parse JSON data
             self.base_data = self.data_buffer  # Store received data
             if self.base_data.get("T") == 1001 and "pan" in self.base_data and "tilt" in self.base_data:
-                self.pan_angle = float(self.base_data.get("pan", 0.0))
-                self.tilt_angle = float(self.base_data.get("tilt", 0.0))
+                self.pan_angle = float(self.base_data["pan"])
+                self.tilt_angle = float(self.base_data["tilt"])
             return self.base_data  # Return base data
         except json.JSONDecodeError as e:
             self.logger.error(f"JSON decode error: {e} with line: {line}")  # Log error
@@ -172,7 +172,7 @@ class ugv_bringup(Node):
         msg = JointState()
         msg.header = Header()
         msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = "base_link"
+        msg.header.frame_id = ""
         msg.name = ['pt_base_link_to_pt_link1', 'pt_link1_to_pt_link2']
         msg.position = [
             self.base_controller.pan_angle * math.pi / 180.0,
