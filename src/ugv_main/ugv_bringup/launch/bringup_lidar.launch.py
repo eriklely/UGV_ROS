@@ -40,10 +40,10 @@ def generate_launch_description():
         executable='ugv_bringup',
     )
 
-    #driver_node = Node(
-    #    package='ugv_bringup',
-    #    executable='ugv_driver',
-    #)
+    driver_node = Node(             # watch this, was commented out
+        package='ugv_bringup',
+        executable='ugv_driver',
+    )
 
     voltage_overlay_node = Node(
         package='ugv_bringup',
@@ -91,7 +91,7 @@ def generate_launch_description():
         rviz_config_arg,
         robot_state_launch,
         bringup_node,
-        #driver_node,
+        driver_node, # watch this, was commented out
         laser_bringup_launch,
         rf2o_laser_odometry_launch,
         voltage_overlay_node,
