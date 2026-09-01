@@ -44,6 +44,11 @@ def generate_launch_description():
         executable='rpi_temperature',
         output='screen',
     )
+    temperature_overlay_node = Node(
+        package='ugv_bringup',
+        executable='temperature_overlay',
+        output='screen',
+    )
     # Include the robot state launch from the ugv_description package
     robot_state_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -131,6 +136,7 @@ def generate_launch_description():
         laser_bringup_launch,
         voltage_overlay_node,
         rpi_temperature_node,
+        temperature_overlay_node,
         #driver_node,
         base_node,
         ekf_node,
