@@ -13,6 +13,7 @@
   <test_depend>python3-pytest</test_depend>
   <depend>rclcpp</depend>
   <depend>rclpy</depend>
+  <depend>rviz_2d_overlay_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <exec_depend>nmea_navsat_driver</exec_depend>
