@@ -27,8 +27,8 @@ UGV_ELSE="$WS_ROOT/src/ugv_else"
 print_header() {
     clear
     echo -e "${CYAN}╔═════════════════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}║${BOLD}                    UGV ROVER - LAUNCH MENU                               ${NC}${CYAN}║${NC}"
-    echo -e "${CYAN}║${NC}              ${YELLOW}UGV ROS2 Workspace Launcher${NC}                                 ${CYAN}║${NC}"
+    echo -e "${CYAN}║${BOLD}                    UGV ROVER - LAUNCH MENU                              ${NC}${CYAN}║${NC}"
+    echo -e "${CYAN}║${NC}              ${YELLOW}UGV ROS2 Workspace Launcher${NC}                                ${CYAN}║${NC}"
     echo -e "${CYAN}╚═════════════════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 }
