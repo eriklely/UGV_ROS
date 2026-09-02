@@ -118,11 +118,23 @@ def launch_setup(context, *args, **kwargs):
 
 # Function to generate the launch description
 def generate_launch_description():
-    # Return the launch description
+    default_map = os.path.join(
+        get_package_share_directory('ugv_nav'), 'maps', 'map.yaml')
+
     return LaunchDescription([
-        DeclareLaunchArgument('use_localplan', default_value='teb', description='Choose which localplan to use: dwa,teb'),
-        DeclareLaunchArgument('use_localization', default_value='amcl', description='Choose which use_localization to use: amcl,cartographer'),
-        OpaqueFunction(function=launch_setup)
+        DeclareLaunchArgument(
+            'use_localplan',
+            default_value='teb',
+            description='Choose which localplan to use: dwa,teb'),
+        DeclareLaunchArgument(
+            'use_localization',
+            default_value='amcl',
+            description='Choose which use_localization to use: amcl,cartographer'),
+        DeclareLaunchArgument(
+            'use_rviz',
+            default_value='false',
+            description='Whether to launch RViz2'),
+        OpaqueFunction(function=launch_setup),
     ])
 
 # Main function to run the launch description
