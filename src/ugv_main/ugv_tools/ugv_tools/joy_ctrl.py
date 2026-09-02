@@ -37,7 +37,7 @@ class JoyTeleop(Node):
         self.pt_pub = self.create_publisher(JointState, 'joint_commands', 10)
 
         self.create_subscription(Joy, 'joy', self.callback, 10)
-        # Measured pose from ugv_bringup (baseboard feedback)
+        # Measured pose from ugv_driver (baseboard feedback)
         self.create_subscription(JointState, 'joint_states', self.on_joint_states, 10)
 
         self.declare_parameter('xspeed_limit', 0.5)

@@ -1,12 +1,8 @@
-from ament_index_python.packages import get_package_share_path
-from launch_ros.substitutions import FindPackageShare
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.conditions import IfCondition, UnlessCondition
-from launch.substitutions import Command, LaunchConfiguration
+from launch.substitutions import LaunchConfiguration
 
 from launch_ros.actions import Node
-from launch_ros.parameter_descriptions import ParameterValue
 import os
 from ament_index_python.packages import get_package_share_directory
 
@@ -39,10 +35,10 @@ def generate_launch_description():
             'rviz_config': LaunchConfiguration('rviz_config'),
         }.items()
     ) 
-    # Define the nodes to be launched                                     
-    bringup_node = Node(
+    # ugv_driver is the only process that opens /dev/ttyAMA0
+    driver_node = Node(
         package='ugv_bringup',
-        executable='ugv_bringup',
+        executable='ugv_driver',
     )
     voltage_overlay_node = Node(
         package='ugv_bringup',
@@ -84,31 +80,24 @@ def generate_launch_description():
         [os.path.join(get_package_share_directory('ldlidar'), 'launch'),
          '/ldlidar.launch.py'])
     )
-    # Define the base node with parameters    
-    #driver_node = Node(
-    #    package='ugv_bringup',
-    #    executable='ugv_driver',
-    #)
     # Define the base node with parameters
     base_node = Node(
         package='ugv_base_node',
         executable='base_node',
         parameters=[{'pub_odom_tf': LaunchConfiguration('pub_odom_tf')}]
     )
-    
 
     return LaunchDescription([
         pub_odom_tf_arg,
         use_rviz_arg,
-        rviz_config_arg,        
+        rviz_config_arg,
         robot_state_launch,
-        bringup_node,
+        driver_node,
         imu_complementary_filter_node,
         #imu_filter_node,
         laser_bringup_launch,
         voltage_overlay_node,        
         rpi_temperature_node,
         temperature_overlay_node,
-        #driver_node,
         base_node
     ])

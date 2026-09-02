@@ -34,13 +34,8 @@ def generate_launch_description():
         }.items()
     )
 
-    # Define the nodes to be launched
-    bringup_node = Node(
-        package='ugv_bringup',
-        executable='ugv_bringup',
-    )
-
-    driver_node = Node(             # watch this, was commented out
+    # ugv_driver is the only process that opens /dev/ttyAMA0
+    driver_node = Node(
         package='ugv_bringup',
         executable='ugv_driver',
     )
@@ -90,8 +85,7 @@ def generate_launch_description():
         use_rviz_arg,
         rviz_config_arg,
         robot_state_launch,
-        bringup_node,
-        driver_node, # watch this, was commented out
+        driver_node,
         laser_bringup_launch,
         rf2o_laser_odometry_launch,
         voltage_overlay_node,
