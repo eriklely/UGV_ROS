@@ -1,37 +1,31 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.substitutions import LaunchConfiguration
-
-from launch_ros.actions import Node
-import os
-from ament_index_python.packages import get_package_share_directory
-
-from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+import os
 
 def generate_launch_description():
-    # Declare launch arguments
     pub_odom_tf_arg = DeclareLaunchArgument(
         'pub_odom_tf', default_value='false',
-        description='Whether to publish the tf from the original odom to the base_footprint'
+        description='Wheels must not publish odom TF; local EKF owns it',
     )
-
     use_rviz_arg = DeclareLaunchArgument(
         'use_rviz', default_value='false',
-        description='Whether to launch RViz2'
+        description='Whether to launch RViz2',
     )
-
     rviz_config_arg = DeclareLaunchArgument(
         'rviz_config', default_value='bringup',
-        description='Choose which rviz configuration to use'
+        description='Choose which rviz configuration to use',
     )
 
     imu_filter_config = os.path.join(
         get_package_share_directory('ugv_bringup'),
         'param',
-        'imu_filter_param.yaml'
+        'imu_filter_param.yaml',
     )
-    # ugv_driver is the only process that opens /dev/ttyAMA0
+
     driver_node = Node(
         package='ugv_bringup',
         executable='ugv_driver',
@@ -53,12 +47,16 @@ def generate_launch_description():
     )
     robot_state_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(get_package_share_directory('ugv_description'), 'launch', 'display.launch.py')
+            os.path.join(
+                get_package_share_directory('ugv_description'),
+                'launch',
+                'display.launch.py',
+            )
         ),
         launch_arguments={
             'use_rviz': LaunchConfiguration('use_rviz'),
             'rviz_config': LaunchConfiguration('rviz_config'),
-        }.items()
+        }.items(),
     )
     imu_complementary_filter_node = Node(
         package='imu_complementary_filter',
@@ -71,16 +69,25 @@ def generate_launch_description():
             {'use_mag': False},
             {'gain_acc': 0.01},
             {'gain_mag': 0.01},
-        ]
+        ],
     )
-    imu_filter_node = Node(
-        package='imu_filter_madgwick',
-        executable='imu_filter_madgwick_node',
-        parameters=[imu_filter_config]
+    laser_bringup_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('ldlidar'),
+                'launch',
+                'ldlidar.launch.py',
+            )
+        )
     )
-    laser_bringup_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(
-        [os.path.join(get_package_share_directory('ldlidar'), 'launch'),
-         '/ldlidar.launch.py'])
+    rf2o_laser_odometry_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('rf2o_laser_odometry'),
+                'launch',
+                'rf2o_laser_odometry.launch.py',
+            )
+        )
     )
     gps_bringup_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -94,24 +101,25 @@ def generate_launch_description():
     base_node = Node(
         package='ugv_base_node',
         executable='base_node_ekf',
-        parameters=[{'pub_odom_tf': LaunchConfiguration('pub_odom_tf')}]
+        parameters=[{'pub_odom_tf': LaunchConfiguration('pub_odom_tf')}],
     )
     ekf_node = Node(
         package='robot_localization',
         executable='ekf_node',
         name='ekf_filter_node',
         output='screen',
-        parameters=[os.path.join(get_package_share_directory('ugv_bringup'), 'param', 'ekf.yaml')],
-        remappings=[('/odometry/filtered', '/odom')]
+        parameters=[os.path.join(
+            get_package_share_directory('ugv_bringup'), 'param', 'ekf.yaml')],
+        remappings=[('/odometry/filtered', '/odom')],
     )
-
     ekf_map_node = Node(
         package='robot_localization',
         executable='ekf_node',
         name='ekf_filter_node_map',
         output='screen',
-        parameters=[os.path.join(get_package_share_directory('ugv_bringup'), 'param', 'ekf_gps.yaml')],
-        remappings=[('/odometry/filtered', '/odometry/filtered_map')]
+        parameters=[os.path.join(
+            get_package_share_directory('ugv_bringup'), 'param', 'ekf_gps.yaml')],
+        remappings=[('/odometry/filtered', '/odometry/filtered_map')],
     )
 
     return LaunchDescription([
@@ -121,13 +129,13 @@ def generate_launch_description():
         robot_state_launch,
         driver_node,
         imu_complementary_filter_node,
-        #imu_filter_node,
         gps_bringup_launch,
         laser_bringup_launch,
+        rf2o_laser_odometry_launch,
         voltage_overlay_node,
         rpi_temperature_node,
         temperature_overlay_node,
         base_node,
         ekf_node,
-        ekf_map_node
+        ekf_map_node,
     ])
