@@ -26,10 +26,10 @@ UGV_ELSE="$WS_ROOT/src/ugv_else"
 # Function to print header
 print_header() {
     clear
-    echo -e "${CYAN}╔═══════════════════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═════════════════════════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║${BOLD}                    UGV ROVER - LAUNCH MENU                          ${NC}${CYAN}║${NC}"
     echo -e "${CYAN}║${NC}              ${YELLOW}UGV ROS2 Workspace Launcher${NC}                         ${CYAN}║${NC}"
-    echo -e "${CYAN}╚═══════════════════════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═════════════════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 }
 
@@ -234,7 +234,7 @@ main_menu() {
                 run_launch "ugv_bringup" "gps.launch.py"
                 ;;
             7) run_command "ros2 run ugv_tools keyboard_ctrl" "Keyboard teleop control" ;;
-            8) run_command "ros2 run ugv_tools joy_ctrl" "Joystick teleop control" ;;
+            8) run_launch "ugv_tools" "joy_ctrl.launch.py" ;;
             9) run_command "ros2 run ugv_tools behavior_ctrl" "Behavior/command control" ;;
             
             # Gazebo Simulation
