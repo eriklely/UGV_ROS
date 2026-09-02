@@ -49,6 +49,16 @@ def generate_launch_description():
         executable='voltage_overlay',
         output='screen',
     )    
+    rpi_temperature_node = Node(
+        package='ugv_bringup',
+        executable='rpi_temperature',
+        output='screen',
+    )
+    temperature_overlay_node = Node(
+        package='ugv_bringup',
+        executable='temperature_overlay',
+        output='screen',
+    )
     # Define the base node with parameters
     imu_complementary_filter_node = Node(
             package='imu_complementary_filter',
@@ -97,7 +107,8 @@ def generate_launch_description():
         #imu_filter_node,
         laser_bringup_launch,
         voltage_overlay_node,        
+        rpi_temperature_node,
+        temperature_overlay_node,
         #driver_node,
         base_node
     ])
-

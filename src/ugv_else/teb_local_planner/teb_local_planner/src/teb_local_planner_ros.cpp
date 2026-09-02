@@ -173,7 +173,7 @@ void TebLocalPlannerROS::initialize(nav2_util::LifecycleNode::SharedPtr node)
     
     // initialize failure detector
     //rclcpp::Node::SharedPtr nh_move_base("~");
-    double controller_frequency = 5;
+    double controller_frequency = 10;
     node->get_parameter("controller_frequency", controller_frequency);
     failure_detector_.setBufferLength(std::round(cfg_->recovery.oscillation_filter_duration*controller_frequency));
     

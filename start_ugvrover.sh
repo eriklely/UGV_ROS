@@ -1,4 +1,3 @@
-#!/bin/bash
 # =============================================================================
 # start_ugvrover.sh - Interactive launcher menu for UGV ROS2 workspace
 # Repository: https://github.com/waveshareteam/ugv_ws
@@ -27,10 +26,10 @@ UGV_ELSE="$WS_ROOT/src/ugv_else"
 # Function to print header
 print_header() {
     clear
-    echo -e "${CYAN}╔═══════════════════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}╔═════════════════════════════════════════════════════════════════════════╗${NC}"
     echo -e "${CYAN}║${BOLD}                    UGV ROVER - LAUNCH MENU                          ${NC}${CYAN}║${NC}"
     echo -e "${CYAN}║${NC}              ${YELLOW}UGV ROS2 Workspace Launcher${NC}                         ${CYAN}║${NC}"
-    echo -e "${CYAN}╚═══════════════════════════════════════════════════════════════════════════╝${NC}"
+    echo -e "${CYAN}╚═════════════════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 }
 
@@ -140,74 +139,62 @@ main_menu() {
         
         # Check workspace
         check_workspace
-        
-        echo -e "${BOLD}Main Categories:${NC}"
-        echo ""
-        
+
         print_category "�  LAPTOP/DESKTOP (External Device)"
         print_item "1" "description_display" "Robot description + RViz (slam_2d config)"
-        print_footer
-        
+        print_item "2" "description_display" "Robot description + RViz (nav_2d config)"
+
         print_category "🚗  BRINGUP & DRIVERS (Real Robot)"
-        print_item "2" "bringup_lidar" "Start LiDAR + robot description + RViz"
-        print_item "3" "bringup_imu_ekf" "IMU + EKF sensor fusion (odom + imu)"
-        print_item "4" "bringup_imu_origin" "IMU origin (no EKF)"
-        print_item "5" "gps" "GPS driver + navsat_transform + EKF fusion"
-        print_item "6" "keyboard_ctrl" "Keyboard teleop control"
-        print_item "7" "joy_ctrl" "Joystick teleop control"
-        print_item "8" "behavior_ctrl" "Behavior/command control"
-        print_footer
+        print_item "3" "bringup_lidar" "Start LiDAR + robot description + RViz"
+        print_item "4" "bringup_imu_ekf" "IMU + EKF sensor fusion (odom + imu)"
+        print_item "5" "bringup_imu_origin" "IMU origin (no EKF)"
+        print_item "6" "gps" "GPS driver + navsat_transform + EKF fusion"
+        print_item "7" "keyboard_ctrl" "Keyboard teleop control"
+        print_item "8" "joy_ctrl" "Joystick teleop control"
+        print_item "9" "behavior_ctrl" "Behavior/command control"
         
         print_category "🌍  GAZEBO SIMULATION"
-        print_item "9" "gazebo_display" "Display robot model in Gazebo (select model)"
-        print_item "10" "gazebo_bringup" "Full Gazebo simulation with house world"
-        print_item "11" "gazebo_bringup_test" "Gazebo empty world for testing"
-        print_footer
+        print_item "10" "gazebo_display" "Display robot model in Gazebo (select model)"
+        print_item "11" "gazebo_bringup" "Full Gazebo simulation with house world"
+        print_item "12" "gazebo_bringup_test" "Gazebo empty world for testing"
         
         print_category "🗺️  SLAM (Mapping)"
-        print_item "12" "slam_gmapping" "Gmapping 2D SLAM (laser only)"
-        print_item "13" "slam_cartographer" "Cartographer 2D SLAM"
-        print_item "14" "slam_rtabmap_rgbd" "RTAB-Map 3D SLAM (RGB-D camera)"
-        print_footer
+        print_item "13" "slam_gmapping" "Gmapping 2D SLAM (laser only)"
+        print_item "14" "slam_cartographer" "Cartographer 2D SLAM"
+        print_item "15" "slam_rtabmap_rgbd" "RTAB-Map 3D SLAM (RGB-D camera)"
         
         print_category "🧭  NAVIGATION (Requires Map)"
-        print_item "15" "nav_amcl" "Nav2 with AMCL localization (DWA/TEB)"
-        print_item "16" "nav_emcl" "Nav2 with EMCL localization"
-        print_item "17" "nav_cartographer" "Nav2 with Cartographer localization"
-        print_item "18" "nav_rtabmap" "Nav2 with RTAB-Map localization"
-        print_footer
+        print_item "16" "nav_amcl" "Nav2 with AMCL localization (DWA/TEB)"
+        print_item "17" "nav_emcl" "Nav2 with EMCL localization"
+        print_item "18" "nav_cartographer" "Nav2 with Cartographer localization"
+        print_item "19" "nav_rtabmap" "Nav2 with RTAB-Map localization"
         
         print_category "🔄  SLAM + NAVIGATION COMBINED"
-        print_item "19" "gazebo_slam_nav" "Gazebo: SLAM + Nav combined"
-        print_item "20" "slam_nav" "Real robot: SLAM + Nav combined"
-        print_footer
+        print_item "20" "gazebo_slam_nav" "Gazebo: SLAM + Nav combined"
+        print_item "21" "slam_nav" "Real robot: SLAM + Nav combined"
         
         print_category "👁️  VISION & PERCEPTION"
-        print_item "21" "camera_usb" "USB camera driver"
-        print_item "22" "camera_oak_d_lite" "OAK-D Lite depth camera"
-        print_item "23" "camera_stereo" "Stereo camera (OAK-D)"
-        print_item "24" "apriltag_track" "AprilTag detection + tracking"
-        print_footer
+        print_item "22" "camera_usb" "USB camera driver"
+        print_item "23" "camera_oak_d_lite" "OAK-D Lite depth camera"
+        print_item "24" "camera_stereo" "Stereo camera (OAK-D)"
+        print_item "25" "apriltag_track" "AprilTag detection + tracking"
         
         print_category "🌐  WEB INTERFACE & VISUALIZATION"
-        print_item "25" "web_app" "Vizanti web interface (port 5000)"
-        print_item "26" "vizanti_server" "Vizanti ROS2 server"
-        print_item "27" "vizanti_rws" "Vizanti RWS backend"
-        print_footer
+        print_item "26" "web_app" "Vizanti web interface (port 5000)"
+        print_item "27" "vizanti_server" "Vizanti ROS2 server"
+        print_item "28" "vizanti_rws" "Vizanti RWS backend"
         
         print_category "📡  LIDAR DRIVERS (Standalone)"
-        print_item "28" "ldlidar_auto" "Auto-detect LiDAR model"
-        print_item "29" "ldlidar_ld06" "LD06 LiDAR"
-        print_item "30" "ldlidar_ld19" "LD19 LiDAR"
-        print_item "31" "ldlidar_stl27l" "STL-27L LiDAR"
-        print_item "32" "ldlidar_viewer" "LiDAR RViz viewer"
-        print_footer
+        print_item "29" "ldlidar_auto" "Auto-detect LiDAR model"
+        print_item "30" "ldlidar_ld06" "LD06 LiDAR"
+        print_item "31" "ldlidar_ld19" "LD19 LiDAR"
+        print_item "32" "ldlidar_stl27l" "STL-27L LiDAR"
+        print_item "33" "ldlidar_viewer" "LiDAR RViz viewer"
         
         print_category "🔧  UTILITIES & TOOLS"
-        print_item "33" "explore_lite" "Autonomous exploration"
-        print_item "34" "emcl2_localization" "EMCL2 Monte Carlo localization"
-        print_item "35" "robot_pose_publisher" "Robot pose publisher"
-        print_footer
+        print_item "34" "explore_lite" "Autonomous exploration"
+        print_item "35" "emcl2_localization" "EMCL2 Monte Carlo localization"
+        print_item "36" "robot_pose_publisher" "Robot pose publisher"
         
         print_category "⚙️  SETTINGS"
         print_item "M" "Change UGV Model" "Current: ${UGV_MODEL:-ugv_rover}"
@@ -215,7 +202,6 @@ main_menu() {
         print_item "R" "Toggle RViz" "Current: ${USE_RVIZ:-false}"
         print_item "S" "Source Workspace" "Re-source install/setup.bash"
         print_item "Q" "Quit" "Exit launcher"
-        print_footer
         
         read -p "Select option: " choice
         echo ""
@@ -224,127 +210,131 @@ main_menu() {
             # Laptop/Desktop
             1) 
                 select_rviz
-                run_launch "ugv_description" "display.launch.py" "use_rviz:=$USE_RVIZ rviz_config:=slam_2d"
+                run_launch "ugv_description" "display.launch.py" "use_rviz:=true rviz_config:=slam_2d"
                 ;;
-            
-            # Bringup & Drivers
             2) 
+                select_rviz
+                run_launch "ugv_description" "display.launch.py" "use_rviz:=true rviz_config:=nav_2d"
+                ;;
+
+            # Bringup & Drivers
+            3) 
                 select_rviz
                 run_launch "ugv_bringup" "bringup_lidar.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
-            3) 
+            4) 
                 select_rviz
                 run_launch "ugv_bringup" "bringup_imu_ekf.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
-            4) 
+            5) 
                 select_rviz
                 run_launch "ugv_bringup" "bringup_imu_origin.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
-            5) 
+            6) 
                 run_launch "ugv_bringup" "gps.launch.py"
                 ;;
-            6) run_command "ros2 run ugv_tools keyboard_ctrl" "Keyboard teleop control" ;;
-            7) run_command "ros2 run ugv_tools joy_ctrl" "Joystick teleop control" ;;
-            8) run_command "ros2 run ugv_tools behavior_ctrl" "Behavior/command control" ;;
+            7) run_command "ros2 run ugv_tools keyboard_ctrl" "Keyboard teleop control" ;;
+            8) run_launch "ugv_tools" "joy_ctrl.launch.py" ;;
+            9) run_command "ros2 run ugv_tools behavior_ctrl" "Behavior/command control" ;;
             
             # Gazebo Simulation
-            9) 
+            10)
                 select_model
                 run_launch "ugv_gazebo" "display.launch.py"
                 ;;
-            10) 
+            11) 
                 select_model
                 run_launch "ugv_gazebo" "bringup.launch.py"
                 ;;
-            11) 
+            12) 
                 select_model
                 run_launch "ugv_gazebo" "bringup_test.launch.py"
                 ;;
             
             # SLAM
-            12) 
+            13) 
                 select_rviz
                 run_launch "ugv_slam" "gmapping.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
-            13) 
+            14) 
                 select_rviz
                 run_launch "ugv_slam" "cartographer.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
-            14) 
+            15) 
                 select_rviz
                 run_launch "ugv_slam" "rtabmap_rgbd.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
             
             # Navigation
-            15) 
+            16) 
                 select_rviz
                 run_launch "ugv_nav" "nav.launch.py" "use_rviz:=$USE_RVIZ use_localplan:=teb use_localization:=amcl"
                 ;;
-            16) 
+            17) 
                 select_rviz
                 run_launch "ugv_nav" "nav.launch.py" "use_rviz:=$USE_RVIZ use_localplan:=teb use_localization:=emcl"
                 ;;
-            17) 
+            18) 
                 select_rviz
                 run_launch "ugv_nav" "nav.launch.py" "use_rviz:=$USE_RVIZ use_localplan:=teb use_localization:=cartographer"
                 ;;
-            18) 
+            19) 
                 select_rviz
                 run_launch "ugv_nav" "nav_rtabmap.launch.py" "use_rviz:=$USE_RVIZ use_localplan:=teb"
                 ;;
             
             # SLAM + Nav Combined
-            19) 
+            20) 
                 select_model
                 run_launch "ugv_gazebo" "slam_nav/slam_nav.launch.py"
                 ;;
-            20) 
+            21) 
                 select_rviz
                 run_launch "ugv_nav" "slam_nav.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
             
             # Vision
-            21) run_launch "ugv_vision" "camera.launch.py" ;;
-            22) run_launch "ugv_vision" "oak_d_lite.launch.py" ;;
-            23) run_launch "ugv_vision" "stereo.launch.py" ;;
-            24) run_launch "ugv_vision" "apriltag_track.launch.py" ;;
+            22) run_launch "ugv_vision" "camera.launch.py" ;;
+            23) run_launch "ugv_vision" "oak_d_lite.launch.py" ;;
+            24) run_launch "ugv_vision" "stereo.launch.py" ;;
+            25) run_launch "ugv_vision" "apriltag_track.launch.py" ;;
             
             # Web Interface
-            25) 
+            26) 
                 read -p "Host IP [0.0.0.0]: " host_ip
                 host_ip=${host_ip:-0.0.0.0}
                 run_launch "ugv_web_app" "bringup.launch.py" "host:=$host_ip"
                 ;;
-            26) run_launch "vizanti_server" "vizanti_server.launch.py" ;;
-            27) run_launch "vizanti_server" "vizanti_rws.launch.py" ;;
+            27) run_launch "vizanti_server" "vizanti_server.launch.py" ;;
+            28) run_launch "vizanti_server" "vizanti_rws.launch.py" ;;
             
             # LiDAR Drivers
-            28) 
+            29) 
                 select_lidar
                 run_launch "ldlidar" "ldlidar.launch.py"
                 ;;
-            29) 
+            30) 
                 export LDLIDAR_MODEL="ld06"
                 run_launch "ldlidar" "ld06.launch.py"
                 ;;
-            30) 
+            31) 
                 export LDLIDAR_MODEL="ld19"
                 run_launch "ldlidar" "ld19.launch.py"
                 ;;
-            31) 
+            32) 
                 export LDLIDAR_MODEL="stl27l"
                 run_launch "ldlidar" "stl27l.launch.py"
                 ;;
-            32) 
+            33) 
                 select_lidar
                 run_launch "ldlidar" "viewer_ldlidar.launch.py"
                 ;;
             
             # Utilities
-            33) run_launch "explore_lite" "explore.launch.py" ;;
-            34) run_launch "emcl2" "emcl2.launch.py" ;;
-            35) run_launch "robot_pose_publisher" "robot_pose_publisher_launch.py" ;;
-            36) 
+            34) run_launch "explore_lite" "explore.launch.py" ;;
+            35) run_launch "emcl2" "emcl2.launch.py" ;;
+            36) run_launch "robot_pose_publisher" "robot_pose_publisher_launch.py" ;;
+            37) 
                 select_rviz
                 run_launch "ugv_description" "display.launch.py" "use_rviz:=$USE_RVIZ"
                 ;;
