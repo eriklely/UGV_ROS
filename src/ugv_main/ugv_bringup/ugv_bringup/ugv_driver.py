@@ -41,29 +41,41 @@ class ReadLine:
         self.s = s
 
     def readline(self):
+        """Return one newline-terminated frame, or None if none is ready.
+
+        Never block: the ROS timer must not wait on UART.
+        """
         i = self.buf.find(b'\n')
         if i >= 0:
             r = self.buf[:i + 1]
             self.buf = self.buf[i + 1:]
             return r
-        while True:
-            i = max(1, min(512, self.s.in_waiting))
-            data = self.s.read(i)
-            i = data.find(b'\n')
-            if i >= 0:
-                r = self.buf + data[:i + 1]
-                self.buf[0:] = data[i + 1:]
-                return r
-            self.buf.extend(data)
+        n = min(512, self.s.in_waiting)
+        if n <= 0:
+            return None
+        data = self.s.read(n)
+        if not data:
+            return None
+        i = data.find(b'\n')
+        if i >= 0:
+            r = self.buf + data[:i + 1]
+            self.buf[0:] = data[i + 1:]
+            return r
+        self.buf.extend(data)
+        if len(self.buf) > 4096:
+            self.buf.clear()
+        return None
 
     def clear_buffer(self):
+        self.buf.clear()
         self.s.reset_input_buffer()
 
 
 class BaseController:
     def __init__(self, uart_dev_set, baud_set):
         self.logger = logging.getLogger('BaseController')
-        self.ser = serial.Serial(uart_dev_set, baud_set, timeout=1)
+        self.ser = serial.Serial(uart_dev_set, baud_set, timeout=0.05)
+        self.ser.reset_input_buffer()
         self.rl = ReadLine(self.ser)
         self.command_queue = queue.Queue()
         self.command_thread = threading.Thread(
@@ -82,8 +94,14 @@ class BaseController:
         self.tilt_angle = 0.0
 
     def feedback_data(self):
+        line = None
         try:
-            line = self.rl.readline().decode('utf-8')
+            raw = self.rl.readline()
+            if not raw:
+                return None
+            line = raw.decode('utf-8', errors='strict').strip()
+            if not line:
+                return None
             self.data_buffer = json.loads(line)
             self.base_data = self.data_buffer
             if (
@@ -94,16 +112,20 @@ class BaseController:
                 self.pan_angle = float(self.base_data['pan'])
                 self.tilt_angle = float(self.base_data['tilt'])
             return self.base_data
-        except json.JSONDecodeError as e:
-            self.logger.error(f'JSON decode error: {e} with line: {line}')
+        except (UnicodeDecodeError, json.JSONDecodeError) as e:
+            self.logger.error(f'UART frame error: {e} with line: {line!r}')
             self.rl.clear_buffer()
         except Exception as e:
             self.logger.error(f'[base_ctrl.feedback_data] unexpected error: {e}')
             self.rl.clear_buffer()
+        return None
 
     def on_data_received(self):
         self.ser.reset_input_buffer()
-        return json.loads(self.rl.readline().decode('utf-8'))
+        raw = self.rl.readline()
+        if not raw:
+            return None
+        return json.loads(raw.decode('utf-8'))
 
     def send_command(self, data):
         self.command_queue.put(data)
@@ -148,8 +170,9 @@ class UgvDriver(Node):
         self.create_subscription(Float32MultiArray, 'led_ctrl', self.led_ctrl_callback, 10)
 
     def feedback_loop(self):
-        self.base_controller.feedback_data()
-        if self.base_controller.base_data['T'] == 1001:
+        if self.base_controller.feedback_data() is None:
+            return
+        if self.base_controller.base_data.get('T') == 1001:
             self.publish_imu_data_raw()
             self.publish_imu_mag()
             self.publish_odom_raw()
