@@ -118,9 +118,6 @@ def launch_setup(context, *args, **kwargs):
 
 # Function to generate the launch description
 def generate_launch_description():
-    default_map = os.path.join(
-        get_package_share_directory('ugv_nav'), 'maps', 'map.yaml')
-
     return LaunchDescription([
         DeclareLaunchArgument(
             'use_localplan',
