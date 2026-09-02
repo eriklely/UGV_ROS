@@ -31,6 +31,7 @@ def generate_launch_description():
                 'slam': 'False',
                 'use_composition': 'False',
                 'autostart': 'true',
+                'bond_timeout': '25.0',
             }.items(),
         ),
         Node(
