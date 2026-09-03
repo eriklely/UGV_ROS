@@ -78,7 +78,7 @@ class ApriltagTracker(Node):
             ey = center_y - cy0
 
             if abs(ex) > dead:
-                self.pan = max(pan_min, min(pan_max, self.pan - k_pan * ex))
+                self.pan = max(pan_min, min(pan_max, self.pan + k_pan * ex))
             if abs(ey) > dead:
                 self.tilt = max(tilt_min, min(tilt_max, self.tilt - k_tilt * ey))
 
