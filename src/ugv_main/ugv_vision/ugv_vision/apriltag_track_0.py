@@ -43,7 +43,7 @@ class ApriltagTracker(Node):
 
         h, w = gray.shape[:2]
         cx0, cy0 = w // 2, h // 2
-        dead = 20
+        dead = 10
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
         turn_start = math.radians(60)
@@ -93,9 +93,9 @@ class ApriltagTracker(Node):
             self.publish_gimbal(self.pan, self.tilt)
 
             if self.pan > turn_start:
-                cmd.angular.z = -0.4
+                cmd.angular.z = -0.8
             elif self.pan < -turn_start:
-                cmd.angular.z = 0.4
+                cmd.angular.z = 0.8
             elif abs(ex) < dead and abs(ey) < dead and abs(self.pan) < straight:
                 cmd.linear.x = 0.08
 
