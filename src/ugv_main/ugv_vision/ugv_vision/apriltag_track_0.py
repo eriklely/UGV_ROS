@@ -43,7 +43,7 @@ class ApriltagTracker(Node):
 
         h, w = gray.shape[:2]
         cx0, cy0 = w // 2, h // 2
-        dead = 10
+        dead = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
         turn_start = math.radians(60)
