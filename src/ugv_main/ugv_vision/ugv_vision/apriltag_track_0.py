@@ -56,7 +56,7 @@ class ApriltagTracker(Node):
         dead_pan_hold = 4
         dead_tilt = 30
         pan_min, pan_max = -math.pi, math.pi
-        tilt_min, tilt_max = -0.3, 1.0
+        tilt_min, tilt_max = -math.radians(15), math.radians(90)
         align_dead = math.radians(60)
         drive_dead = math.radians(8)
         max_wz = 1.2
