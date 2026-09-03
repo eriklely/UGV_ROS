@@ -68,7 +68,7 @@ class ApriltagTracker(Node):
         self.last_t = now
         dt = max(1e-3, min(dt, 0.1))
 
-        k_pan = 0.024          # gimbal pan speed vs pixel error (higher = snappier head yaw)
+        k_pan = 0.021          # gimbal pan speed vs pixel error (higher = snappier head yaw)
         k_tilt = 0.014         # gimbal tilt speed vs pixel error (higher = snappier head pitch)
         d_pan = 0.8            # 0–1: pan smoothing (1 = use new command fully, lower = more lag)
         d_tilt = 0.85          # 0–1: tilt smoothing (1 = use new command fully, lower = more lag)
