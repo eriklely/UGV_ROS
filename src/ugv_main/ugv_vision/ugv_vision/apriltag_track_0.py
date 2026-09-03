@@ -1,5 +1,7 @@
 import json
 import time
+import math
+import math
 
 import cv2
 import rclpy
@@ -84,13 +86,16 @@ class ApriltagTracker(Node):
 
             self.publish_gimbal(self.pan, self.tilt)
 
-            body = [{'T': 1, 'type': 'stop', 'data': 0}]
-            if ex > dead and self.pan <= pan_min + 0.05:
-                body = [{'T': 1, 'type': 'spin', 'data': -0.4}]
-            elif ex < -dead and self.pan >= pan_max - 0.05:
+            turn_start = math.radians(70)
+
+            if self.pan >= turn_start:
+                body = [{'T': 1, 'type': 'spin', 'data': -0.4}]   # flip data if wrong way
+            elif self.pan <= -turn_start:
                 body = [{'T': 1, 'type': 'spin', 'data': 0.4}]
             elif abs(ex) < dead and abs(ey) < dead:
                 body = [{'T': 1, 'type': 'drive_on_heading', 'data': 0.01}]
+            else:
+                body = [{'T': 1, 'type': 'stop', 'data': 0}]
 
             self.send_goal(json.dumps(body))
             break
