@@ -46,7 +46,7 @@ class ApriltagTracker(Node):
         dead = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
-        align_dead = math.radians(8)
+        align_dead = math.radians(60)
         max_wz = 1.2
         k_yaw = 2.5
 
