@@ -28,7 +28,7 @@ class ApriltagTracker(Node):
             history=HistoryPolicy.KEEP_LAST,
             depth=1,
         )
-        
+
         self.create_subscription(Image, '/image_raw', self.image_callback, qos)
         self.apriltag_track_publisher = self.create_publisher(
             Image, '/apriltag_track/result', 10)
@@ -56,7 +56,7 @@ class ApriltagTracker(Node):
         dead_pan_hold = 4
         dead_tilt = 30
         pan_min, pan_max = -math.pi, math.pi
-        tilt_min, tilt_max = -0.6, 0.8
+        tilt_min, tilt_max = -0.3, 1.0
         align_dead = math.radians(60)
         drive_dead = math.radians(8)
         max_wz = 1.2
