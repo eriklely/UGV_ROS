@@ -23,7 +23,6 @@ class ApriltagTracker(Node):
         self.turning = False
         self.driving = False
         self.panning = False
-        self.pan_sign = 0.0
 
         qos = QoSProfile(
             reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -55,7 +54,7 @@ class ApriltagTracker(Node):
         h, w = gray.shape[:2]
         cx0, cy0 = w // 2, h // 2
         dead_pan = 12
-        pan_overshoot = 4
+        dead_pan_hold = 4
         dead_tilt = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -math.radians(15), math.radians(90)
@@ -93,20 +92,13 @@ class ApriltagTracker(Node):
             ex = center_x - cx0
             ey = center_y - cy0
 
-            if not self.panning:
-                if abs(ex) > dead_pan:
-                    self.panning = True
-                    self.pan_sign = 1.0 if ex > 0 else -1.0
-            elif ex * self.pan_sign <= -pan_overshoot:
+            if abs(ex) > dead_pan:
+                self.panning = True
+            elif abs(ex) < dead_pan_hold:
                 self.panning = False
 
             if self.panning:
-                # Keep the original direction after center; live ex would reverse there.
-                if ex * self.pan_sign > 0:
-                    follow_ex = ex
-                else:
-                    follow_ex = self.pan_sign * pan_overshoot
-                dpan = k_pan * follow_ex * dt
+                dpan = k_pan * ex * dt
                 dpan = max(-max_dpan, min(max_dpan, dpan))
                 self.pan = (1.0 - d_pan) * self.pan + d_pan * (self.pan + dpan)
                 self.pan = max(pan_min, min(pan_max, self.pan))
