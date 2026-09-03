@@ -36,84 +36,84 @@ class ApriltagTracker(Node):
         msg.position = [float(pan), float(tilt)]
         self.gimbal_pub.publish(msg)
 
-def image_callback(self, msg):
-    frame = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    results = self.detector.detect(gray)
+    def image_callback(self, msg):
+        frame = self.bridge.imgmsg_to_cv2(msg, 'bgr8')
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        results = self.detector.detect(gray)
 
-    h, w = gray.shape[:2]
-    cx0, cy0 = w // 2, h // 2
-    dead = 20
-    pan_min, pan_max = -math.pi, math.pi
-    tilt_min, tilt_max = -0.6, 0.8
-    turn_start = math.radians(60)
-    straight = math.radians(20)
+        h, w = gray.shape[:2]
+        cx0, cy0 = w // 2, h // 2
+        dead = 20
+        pan_min, pan_max = -math.pi, math.pi
+        tilt_min, tilt_max = -0.6, 0.8
+        turn_start = math.radians(60)
+        straight = math.radians(20)
 
-    now = self.get_clock().now()
-    dt = (now - self.last_t).nanoseconds / 1e9
-    self.last_t = now
-    dt = max(1e-3, min(dt, 0.1))
+        now = self.get_clock().now()
+        dt = (now - self.last_t).nanoseconds / 1e9
+        self.last_t = now
+        dt = max(1e-3, min(dt, 0.1))
 
-    k_pan = 0.0012
-    k_tilt = 0.00035
-    d_pan = 0.6
-    d_tilt = 0.75
-    max_dpan = 0.08
-    max_dtilt = 0.04
+        k_pan = 0.0012
+        k_tilt = 0.00035
+        d_pan = 0.6
+        d_tilt = 0.75
+        max_dpan = 0.08
+        max_dtilt = 0.04
 
-    cmd = Twist()
-    saw_tag = False
+        cmd = Twist()
+        saw_tag = False
 
-    for r in results:
-        if r['id'] != 0:
-            continue
-        saw_tag = True
+        for r in results:
+            if r['id'] != 0:
+                continue
+            saw_tag = True
 
-        corners = r['lb-rb-rt-lt'].astype(int)
-        cv2.polylines(frame, [corners], True, (0, 255, 0), 2)
-        center_x = int(r['center'][0])
-        center_y = int(r['center'][1])
-        cv2.circle(frame, (center_x, center_y), 5, (0, 0, 255), -1)
+            corners = r['lb-rb-rt-lt'].astype(int)
+            cv2.polylines(frame, [corners], True, (0, 255, 0), 2)
+            center_x = int(r['center'][0])
+            center_y = int(r['center'][1])
+            cv2.circle(frame, (center_x, center_y), 5, (0, 0, 255), -1)
 
-        ex = center_x - cx0
-        ey = center_y - cy0
+            ex = center_x - cx0
+            ey = center_y - cy0
 
-        if abs(ex) > dead:
-            dpan = k_pan * ex * dt
-            dpan = max(-max_dpan, min(max_dpan, dpan))
-            self.pan = (1.0 - d_pan) * self.pan + d_pan * (self.pan + dpan)
-            self.pan = max(pan_min, min(pan_max, self.pan))
+            if abs(ex) > dead:
+                dpan = k_pan * ex * dt
+                dpan = max(-max_dpan, min(max_dpan, dpan))
+                self.pan = (1.0 - d_pan) * self.pan + d_pan * (self.pan + dpan)
+                self.pan = max(pan_min, min(pan_max, self.pan))
 
-        if abs(ey) > dead:
-            dtilt = -k_tilt * ey * dt
-            dtilt = max(-max_dtilt, min(max_dtilt, dtilt))
-            self.tilt = (1.0 - d_tilt) * self.tilt + d_tilt * (self.tilt + dtilt)
-            self.tilt = max(tilt_min, min(tilt_max, self.tilt))
+            if abs(ey) > dead:
+                dtilt = -k_tilt * ey * dt
+                dtilt = max(-max_dtilt, min(max_dtilt, dtilt))
+                self.tilt = (1.0 - d_tilt) * self.tilt + d_tilt * (self.tilt + dtilt)
+                self.tilt = max(tilt_min, min(tilt_max, self.tilt))
 
-        self.publish_gimbal(self.pan, self.tilt)
+            self.publish_gimbal(self.pan, self.tilt)
 
-        if self.pan > turn_start:
-            cmd.angular.z = -0.4
-        elif self.pan < -turn_start:
-            cmd.angular.z = 0.4
-        elif abs(ex) < dead and abs(ey) < dead and abs(self.pan) < straight:
-            cmd.linear.x = 0.08
+            if self.pan > turn_start:
+                cmd.angular.z = -0.4
+            elif self.pan < -turn_start:
+                cmd.angular.z = 0.4
+            elif abs(ex) < dead and abs(ey) < dead and abs(self.pan) < straight:
+                cmd.linear.x = 0.08
 
-        self.get_logger().info(
-            f'pan={math.degrees(self.pan):.0f} deg  '
-            f'wz={cmd.angular.z:.2f}  vx={cmd.linear.x:.2f}'
-        )
-        break
+            self.get_logger().info(
+                f'pan={math.degrees(self.pan):.0f} deg  '
+                f'wz={cmd.angular.z:.2f}  vx={cmd.linear.x:.2f}'
+            )
+            break
 
-    if not saw_tag:
-        self.publish_gimbal(self.pan, self.tilt)
+        if not saw_tag:
+            self.publish_gimbal(self.pan, self.tilt)
 
-    self.cmd_pub.publish(cmd)
+        self.cmd_pub.publish(cmd)
 
-    out = self.bridge.cv2_to_imgmsg(frame, encoding='bgr8')
-    self.apriltag_track_publisher.publish(out)
-    cv2.imshow('Tracked Image', frame)
-    cv2.waitKey(1)
+        out = self.bridge.cv2_to_imgmsg(frame, encoding='bgr8')
+        self.apriltag_track_publisher.publish(out)
+        cv2.imshow('Tracked Image', frame)
+        cv2.waitKey(1)
 
 
 def main(args=None):
