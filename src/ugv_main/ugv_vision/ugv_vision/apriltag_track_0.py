@@ -44,10 +44,10 @@ class ApriltagTracker(Node):
         results = self.detector.detect(gray)
 
         h, w = gray.shape[:2]
-        cx0,_pan = 12
+        cx0, cy0 = w // 2, h // 2
+        dead_pan = 12
         dead_pan_hold = 4
-        dead_tilt cy0 = w // 2, h // 2
-        dead = 30
+        dead_tilt = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
         align_dead = math.radians(60)
@@ -82,7 +82,9 @@ class ApriltagTracker(Node):
             cv2.circle(frame, (center_x, center_y), 5, (0, 0, 255), -1)
 
             ex = center_x - cx0
-            ey = center_y - c_pan:
+            ey = center_y - cy0
+
+            if abs(ex) > dead_pan:
                 self.panning = True
             elif abs(ex) < dead_pan_hold:
                 self.panning = False
@@ -93,9 +95,7 @@ class ApriltagTracker(Node):
                 self.pan = (1.0 - d_pan) * self.pan + d_pan * (self.pan + dpan)
                 self.pan = max(pan_min, min(pan_max, self.pan))
 
-            if abs(ey) > dead_tiltx(pan_min, min(pan_max, self.pan))
-
-            if abs(ey) > dead:
+            if abs(ey) > dead_tilt:
                 dtilt = -k_tilt * ey * dt
                 dtilt = max(-max_dtilt, min(max_dtilt, dtilt))
                 self.tilt = (1.0 - d_tilt) * self.tilt + d_tilt * (self.tilt + dtilt)
@@ -106,12 +106,12 @@ class ApriltagTracker(Node):
             elif abs(self.pan) < drive_dead:
                 self.turning = False
 
-            if self.turning:_pan and abs(ey) < dead_tilt
+            if self.turning:
                 cmd.angular.z = max(-max_wz, min(max_wz, -k_yaw * self.pan))
                 # Unwind gimbal as the base turns so the camera stays on the tag.
                 self.pan = self.pan + cmd.angular.z * dt
                 self.pan = max(pan_min, min(pan_max, self.pan))
-            elif abs(ex) < dead and abs(ey) < dead:
+            elif abs(ex) < dead_pan and abs(ey) < dead_tilt:
                 cmd.linear.x = 0.15
 
             self.publish_gimbal(self.pan, self.tilt)
