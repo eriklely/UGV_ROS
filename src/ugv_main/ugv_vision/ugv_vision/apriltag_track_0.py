@@ -47,8 +47,8 @@ class ApriltagTracker(Node):
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
         align_dead = math.radians(8)
-        max_wz = 0.8
-        k_yaw = 1.5
+        max_wz = 1.5
+        k_yaw = 3
 
         now = self.get_clock().now()
         dt = (now - self.last_t).nanoseconds / 1e9
