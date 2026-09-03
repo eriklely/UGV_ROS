@@ -46,8 +46,9 @@ class ApriltagTracker(Node):
         dead = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
-        turn_start = math.radians(60)
-        straight = math.radians(20)
+        align_dead = math.radians(8)
+        max_wz = 0.8
+        k_yaw = 1.5
 
         now = self.get_clock().now()
         dt = (now - self.last_t).nanoseconds / 1e9
@@ -90,14 +91,15 @@ class ApriltagTracker(Node):
                 self.tilt = (1.0 - d_tilt) * self.tilt + d_tilt * (self.tilt + dtilt)
                 self.tilt = max(tilt_min, min(tilt_max, self.tilt))
 
-            self.publish_gimbal(self.pan, self.tilt)
-
-            if self.pan > turn_start:
-                cmd.angular.z = -0.8
-            elif self.pan < -turn_start:
-                cmd.angular.z = 0.8
-            elif abs(ex) < dead and abs(ey) < dead and abs(self.pan) < straight:
+            if abs(self.pan) > align_dead:
+                cmd.angular.z = max(-max_wz, min(max_wz, -k_yaw * self.pan))
+                # Unwind gimbal as the base turns so the camera stays on the tag.
+                self.pan = self.pan + cmd.angular.z * dt
+                self.pan = max(pan_min, min(pan_max, self.pan))
+            elif abs(ex) < dead and abs(ey) < dead:
                 cmd.linear.x = 0.08
+
+            self.publish_gimbal(self.pan, self.tilt)
 
             self.get_logger().info(
                 f'pan={math.degrees(self.pan):.0f} deg  '
