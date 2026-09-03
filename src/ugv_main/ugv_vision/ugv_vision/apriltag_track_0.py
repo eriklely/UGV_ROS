@@ -94,10 +94,10 @@ class ApriltagTracker(Node):
 
             if abs(ex) > dead_pan:
                 self.panning = True
-            elif abs(ex) < dead_pan_hold:
                 self.pan_sign = 1.0 if ex > 0 else -1.0
             elif self.panning and ex * self.pan_sign <= 0:
                 # Keep following until the tag crosses center, not the deadzone edge.
+                self.panning = False
 
             if self.panning:
                 dpan = k_pan * ex * dt
