@@ -23,6 +23,7 @@ class ApriltagTracker(Node):
         self.turning = False
         self.driving = False
         self.panning = False
+        self.pan_sign = 0.0
 
         qos = QoSProfile(
             reliability=ReliabilityPolicy.BEST_EFFORT,
@@ -54,7 +55,6 @@ class ApriltagTracker(Node):
         h, w = gray.shape[:2]
         cx0, cy0 = w // 2, h // 2
         dead_pan = 12
-        dead_pan_hold = 4
         dead_tilt = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -math.radians(15), math.radians(90)
@@ -95,7 +95,9 @@ class ApriltagTracker(Node):
             if abs(ex) > dead_pan:
                 self.panning = True
             elif abs(ex) < dead_pan_hold:
-                self.panning = False
+                self.pan_sign = 1.0 if ex > 0 else -1.0
+            elif self.panning and ex * self.pan_sign <= 0:
+                # Keep following until the tag crosses center, not the deadzone edge.
 
             if self.panning:
                 dpan = k_pan * ex * dt
