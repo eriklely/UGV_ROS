@@ -3,6 +3,7 @@ import math
 import cv2
 import rclpy
 from rclpy.node import Node
+from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from sensor_msgs.msg import Image, JointState
 from geometry_msgs.msg import Twist
 from cv_bridge import CvBridge
@@ -22,7 +23,13 @@ class ApriltagTracker(Node):
         self.turning = False
         self.panning = False
 
-        self.create_subscription(Image, '/image_raw', self.image_callback, 10)
+        qos = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1,
+        )
+        
+        self.create_subscription(Image, '/image_raw', self.image_callback, qos)
         self.apriltag_track_publisher = self.create_publisher(
             Image, '/apriltag_track/result', 10)
         self.gimbal_pub = self.create_publisher(JointState, '/joint_commands', 10)
@@ -116,10 +123,6 @@ class ApriltagTracker(Node):
 
             self.publish_gimbal(self.pan, self.tilt)
 
-            self.get_logger().info(
-                f'pan={math.degrees(self.pan):.0f} deg  '
-                f'wz={cmd.angular.z:.2f}  vx={cmd.linear.x:.2f}'
-            )
             break
 
         if not saw_tag:
@@ -129,8 +132,6 @@ class ApriltagTracker(Node):
 
         out = self.bridge.cv2_to_imgmsg(frame, encoding='bgr8')
         self.apriltag_track_publisher.publish(out)
-        cv2.imshow('Tracked Image', frame)
-        cv2.waitKey(1)
 
 
 def main(args=None):
