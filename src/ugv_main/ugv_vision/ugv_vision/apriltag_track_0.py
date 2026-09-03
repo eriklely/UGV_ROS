@@ -59,8 +59,8 @@ class ApriltagTracker(Node):
         k_tilt = 0.014
         d_pan = 0.8
         d_tilt = 0.85
-        max_dpan = 0.42
-        max_dtilt = 0.28
+        max_dpan = 0.32
+        max_dtilt = 0.21
 
         cmd = Twist()
         saw_tag = False
