@@ -20,6 +20,7 @@ class ApriltagTracker(Node):
         self.pan = 0.0
         self.tilt = 0.0
         self.turning = False
+        self.panning = False
 
         self.create_subscription(Image, '/image_raw', self.image_callback, 10)
         self.apriltag_track_publisher = self.create_publisher(
@@ -43,7 +44,9 @@ class ApriltagTracker(Node):
         results = self.detector.detect(gray)
 
         h, w = gray.shape[:2]
-        cx0, cy0 = w // 2, h // 2
+        cx0,_pan = 12
+        dead_pan_hold = 4
+        dead_tilt cy0 = w // 2, h // 2
         dead = 30
         pan_min, pan_max = -math.pi, math.pi
         tilt_min, tilt_max = -0.6, 0.8
@@ -79,13 +82,18 @@ class ApriltagTracker(Node):
             cv2.circle(frame, (center_x, center_y), 5, (0, 0, 255), -1)
 
             ex = center_x - cx0
-            ey = center_y - cy0
+            ey = center_y - c_pan:
+                self.panning = True
+            elif abs(ex) < dead_pan_hold:
+                self.panning = False
 
-            if abs(ex) > dead:
+            if self.panning:
                 dpan = k_pan * ex * dt
                 dpan = max(-max_dpan, min(max_dpan, dpan))
                 self.pan = (1.0 - d_pan) * self.pan + d_pan * (self.pan + dpan)
                 self.pan = max(pan_min, min(pan_max, self.pan))
+
+            if abs(ey) > dead_tiltx(pan_min, min(pan_max, self.pan))
 
             if abs(ey) > dead:
                 dtilt = -k_tilt * ey * dt
@@ -98,7 +106,7 @@ class ApriltagTracker(Node):
             elif abs(self.pan) < drive_dead:
                 self.turning = False
 
-            if self.turning:
+            if self.turning:_pan and abs(ey) < dead_tilt
                 cmd.angular.z = max(-max_wz, min(max_wz, -k_yaw * self.pan))
                 # Unwind gimbal as the base turns so the camera stays on the tag.
                 self.pan = self.pan + cmd.angular.z * dt
