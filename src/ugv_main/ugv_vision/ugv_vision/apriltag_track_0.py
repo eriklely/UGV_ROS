@@ -112,7 +112,7 @@ class ApriltagTracker(Node):
             if abs(self.pan) > align_dead:
                 self.turning = True
                 self.driving = False
-            elif abs(self.pan) < drive_dead:
+            elif abs(self.pan) <= drive_dead:
                 self.turning = False
                 self.driving = True
             else:
