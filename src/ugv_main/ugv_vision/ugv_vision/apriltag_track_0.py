@@ -20,6 +20,10 @@ class ApriltagTracker(Node):
         self.last_t = self.get_clock().now()
         self.pan = 0.0
         self.tilt = 0.0
+        self.move_delay_time = 2.0          # s: wait before body may move
+        self.tag_seen_t = None              # time tag was first acquired this sighting
+        self.last_seen_t = None             # last time tag id 0 was seen
+        self.body_enabled = False           # latch: body is allowed to turn/drive
         self.turning = False
         self.driving = False
         self.panning = False
@@ -53,15 +57,20 @@ class ApriltagTracker(Node):
 
         h, w = gray.shape[:2]
         cx0, cy0 = w // 2, h // 2
-        dead_pan = 20          # px: start gimbal pan if tag is this far left/right of center
-        dead_pan_hold = 20     # px: stop gimbal pan once the tag is this close to center
+        dead_pan = 28          # px: start gimbal pan if tag is this far left/right of center
+        dead_pan_hold = 12     # px: stop gimbal pan once the tag is this close to center
         dead_tilt = 20         # px: start gimbal tilt if tag is this far above/below center
         pan_min, pan_max = -math.pi, math.pi          # rad: gimbal pan limits
         tilt_min, tilt_max = -math.radians(15), math.radians(90)  # rad: gimbal tilt limits
-        align_dead = math.radians(60)  # rad: body starts turning when |pan| exceeds this
-        drive_dead = math.radians(10)   # rad: body stops turning / may drive when |pan| is under this
+        align_dead = math.radians(60)  # rad: immediate body-enable if |pan| exceeds this
+        yaw_start = math.radians(12)   # rad: start yaw once body is enabled
+        yaw_stop = math.radians(6)     # rad: stop yaw once aligned enough
+        drive_start = math.radians(12) # rad: start drive once heading is close
+        drive_stop = math.radians(25)  # rad: stop drive if heading opens up again
+        unseen_timeout = 0.3   # s: ignore brief dropouts; reset latch after this
         max_wz = 1.2           # rad/s: max body yaw rate (cmd_vel.angular.z clamp)
         k_yaw = 2.5            # 1/s: body turn gain, wz = -k_yaw * pan (then clamped by max_wz)
+        vx = 0.15              # m/s: forward speed while driving
 
         now = self.get_clock().now()
         dt = (now - self.last_t).nanoseconds / 1e9
@@ -82,6 +91,7 @@ class ApriltagTracker(Node):
             if r['id'] != 0:
                 continue
             saw_tag = True
+            self.last_seen_t = now
 
             corners = r['lb-rb-rt-lt'].astype(int)
             cv2.polylines(frame, [corners], True, (0, 255, 0), 2)
@@ -109,28 +119,53 @@ class ApriltagTracker(Node):
                 self.tilt = (1.0 - d_tilt) * self.tilt + d_tilt * (self.tilt + dtilt)
                 self.tilt = max(tilt_min, min(tilt_max, self.tilt))
 
-            if abs(self.pan) > align_dead:
-                self.turning = True
-                self.driving = False
-            elif abs(self.pan) <= drive_dead:
-                self.turning = False
-                self.driving = True
-            else:
-                self.driving = False
+            if self.tag_seen_t is None:
+                self.tag_seen_t = now
+            held = (now - self.tag_seen_t).nanoseconds / 1e9
 
-            if self.turning:
-                cmd.angular.z = max(-max_wz, min(max_wz, -k_yaw * self.pan))
-                # Unwind gimbal as the base turns so the camera stays on the tag.
-                self.pan = self.pan + cmd.angular.z * dt
-                self.pan = max(pan_min, min(pan_max, self.pan))
-            elif self.driving:
-                cmd.linear.x = 0.15    # m/s: forward speed while heading is inside drive_dead
+            if (not self.body_enabled) and (
+                    abs(self.pan) > align_dead or held >= self.move_delay_time):
+                self.body_enabled = True
+
+            if self.body_enabled:
+                if abs(self.pan) > yaw_start:
+                    self.turning = True
+                elif abs(self.pan) < yaw_stop:
+                    self.turning = False
+
+                if abs(self.pan) <= drive_start:
+                    self.driving = True
+                elif abs(self.pan) > drive_stop:
+                    self.driving = False
+
+                if self.turning:
+                    cmd.angular.z = max(-max_wz, min(max_wz, -k_yaw * self.pan))
+                    # Unwind gimbal as the base turns so the camera stays on the tag.
+                    self.pan = self.pan + cmd.angular.z * dt
+                    self.pan = max(pan_min, min(pan_max, self.pan))
+                if self.driving:
+                    cmd.linear.x = vx
 
             self.publish_gimbal(self.pan, self.tilt)
 
             break
 
         if not saw_tag:
+            if self.last_seen_t is not None:
+                unseen = (now - self.last_seen_t).nanoseconds / 1e9
+                if unseen > unseen_timeout:
+                    self.tag_seen_t = None
+                    self.body_enabled = False
+                    self.turning = False
+                    self.driving = False
+                    cmd = Twist()
+                elif self.body_enabled:
+                    if self.turning:
+                        cmd.angular.z = max(-max_wz, min(max_wz, -k_yaw * self.pan))
+                        self.pan = self.pan + cmd.angular.z * dt
+                        self.pan = max(pan_min, min(pan_max, self.pan))
+                    if self.driving:
+                        cmd.linear.x = vx
             self.publish_gimbal(self.pan, self.tilt)
 
         self.cmd_pub.publish(cmd)
