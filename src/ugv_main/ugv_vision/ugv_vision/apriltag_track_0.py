@@ -53,13 +53,13 @@ class ApriltagTracker(Node):
 
         h, w = gray.shape[:2]
         cx0, cy0 = w // 2, h // 2
-        dead_pan = 30          # px: start gimbal pan if tag is this far left/right of center
-        dead_pan_hold = 20      # px: stop gimbal pan once the tag is this close to center
-        dead_tilt = 30         # px: start gimbal tilt if tag is this far above/below center
+        dead_pan = 20          # px: start gimbal pan if tag is this far left/right of center
+        dead_pan_hold = 20     # px: stop gimbal pan once the tag is this close to center
+        dead_tilt = 20         # px: start gimbal tilt if tag is this far above/below center
         pan_min, pan_max = -math.pi, math.pi          # rad: gimbal pan limits
         tilt_min, tilt_max = -math.radians(15), math.radians(90)  # rad: gimbal tilt limits
         align_dead = math.radians(60)  # rad: body starts turning when |pan| exceeds this
-        drive_dead = math.radians(8)   # rad: body stops turning / may drive when |pan| is under this
+        drive_dead = math.radians(10)   # rad: body stops turning / may drive when |pan| is under this
         max_wz = 1.2           # rad/s: max body yaw rate (cmd_vel.angular.z clamp)
         k_yaw = 2.5            # 1/s: body turn gain, wz = -k_yaw * pan (then clamped by max_wz)
 
@@ -68,11 +68,11 @@ class ApriltagTracker(Node):
         self.last_t = now
         dt = max(1e-3, min(dt, 0.1))
 
-        k_pan = 0.021          # gimbal pan speed vs pixel error (higher = snappier head yaw)
+        k_pan = 0.022          # gimbal pan speed vs pixel error (higher = snappier head yaw)
         k_tilt = 0.014         # gimbal tilt speed vs pixel error (higher = snappier head pitch)
-        d_pan = 0.8            # 0–1: pan smoothing (1 = use new command fully, lower = more lag)
+        d_pan = 0.50           # 0–1: pan smoothing (1 = use new command fully, lower = more lag)
         d_tilt = 0.85          # 0–1: tilt smoothing (1 = use new command fully, lower = more lag)
-        max_dpan = 0.32        # rad/frame: max pan step so the head cannot jump
+        max_dpan = 0.33        # rad/frame: max pan step so the head cannot jump
         max_dtilt = 0.21       # rad/frame: max tilt step so the head cannot jump
 
         cmd = Twist()
