@@ -69,7 +69,7 @@ class ApriltagTracker(Node):
         drive_stop = math.radians(25)  # rad: stop drive if heading opens up again
         unseen_timeout = 0.3   # s: ignore brief dropouts; reset latch after this
         max_wz = 1.2           # rad/s: max body yaw rate (cmd_vel.angular.z clamp)
-        k_yaw = 2.5            # 1/s: body turn gain, wz = -k_yaw * pan (then clamped by max_wz)
+        k_yaw = 5            # 1/s: body turn gain, wz = -k_yaw * pan (then clamped by max_wz)
         vx = 0.15              # m/s: forward speed while driving
 
         now = self.get_clock().now()
