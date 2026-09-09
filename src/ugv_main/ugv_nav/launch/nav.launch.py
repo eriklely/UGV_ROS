@@ -87,15 +87,7 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
         condition=LaunchConfigurationEquals('use_localization', 'emcl')
     )
-
-    nav2_emcl_delayed = TimerAction(
-        period=3.0,
-        actions=[
-            emcl_launch,
-            nav2_bringup_emcl_launch
-        ]
-    )    
-    
+ 
     # Include the emcl launch description if use_localization is emcl
     emcl_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(emcl_dir, 'launch', 'emcl2.launch.py')),
@@ -104,7 +96,15 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
         condition=LaunchConfigurationEquals('use_localization', 'emcl')
     )
-    
+
+    nav2_emcl_delayed = TimerAction(
+        period=3.0,
+        actions=[
+            emcl_launch,
+            nav2_bringup_emcl_launch
+        ]
+    )       
+
     # Include the nav2_bringup_cartographer launch description if use_localization is cartographer
     nav2_bringup_cartographer_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(get_package_share_directory('ugv_nav'), 'launch/nav_bringup', 'bringup_launch_cartographer.launch.py')),
