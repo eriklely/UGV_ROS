@@ -81,8 +81,8 @@ class ApriltagTracker(Node):
         k_tilt = 0.014         # gimbal tilt speed vs pixel error (higher = snappier head pitch)
         d_pan = 0.65           # 0–1: pan smoothing (1 = use new command fully, lower = more lag)
         d_tilt = 0.75          # 0–1: tilt smoothing (1 = use new command fully, lower = more lag)
-        max_dpan = 0.33        # rad/frame: max pan step so the head cannot jump
-        max_dtilt = 0.21       # rad/frame: max tilt step so the head cannot jump
+        max_dpan = 0.36        # rad/frame: max pan step so the head cannot jump
+        max_dtilt = 0.24       # rad/frame: max tilt step so the head cannot jump
 
         cmd = Twist()
         saw_tag = False
