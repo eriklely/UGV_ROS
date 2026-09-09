@@ -170,9 +170,9 @@ class BehaviorController(Node):
         
         # Determine the direction of the spin
         if angle > 0:
-            twist_msg.angular.z = 0.3
+            twist_msg.angular.z = 0.6
         else:
-            twist_msg.angular.z = -0.3     
+            twist_msg.angular.z = -0.6     
                
         twist_msg.linear.x = 0.0
 
