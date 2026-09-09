@@ -8,6 +8,7 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 from launch.conditions import IfCondition, UnlessCondition, LaunchConfigurationEquals
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.actions import TimerAction
 
 # Function to get the localplan config file based on the launch configuration
 def get_localplan_config_file(context):
@@ -72,6 +73,11 @@ def launch_setup(context, *args, **kwargs):
         condition=LaunchConfigurationEquals('use_localization', 'amcl')
     )
 
+    nav2_delayed = TimerAction(
+        period=3.0,
+        actions=[nav2_bringup_amcl_launch]
+    )
+
     # Include the nav2_bringup_emcl launch description if use_localization is emcl
     nav2_bringup_emcl_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(ugv_nav_dir, 'launch/nav_bringup', 'nav2_bringup.launch.py')),
@@ -109,7 +115,7 @@ def launch_setup(context, *args, **kwargs):
     # Return the list of launch descriptions
     return [
         bringup_lidar_launch,
-        nav2_bringup_amcl_launch,
+        nav2_delayed,
         nav2_bringup_emcl_launch,
         emcl_launch,
         robot_pose_publisher_launch,

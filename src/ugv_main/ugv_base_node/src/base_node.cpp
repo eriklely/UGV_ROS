@@ -193,13 +193,17 @@ private:
         odom.header.frame_id = odom_frame;
         odom.child_frame_id = base_footprint_frame;
 
+        tf2::Quaternion q_yaw;
+        q_yaw.setRPY(0.0, 0.0, yaw);
+        q_yaw.normalize();
+
         // Set the position and orientation in the odometry message
         odom.pose.pose.position.x = x_pos_;
         odom.pose.pose.position.y = y_pos_;
-        odom.pose.pose.orientation.x = q1;
-        odom.pose.pose.orientation.y = q2;
-        odom.pose.pose.orientation.z = q3;
-        odom.pose.pose.orientation.w = q0;
+        odom.pose.pose.orientation.x = q_yaw.x();
+        odom.pose.pose.orientation.y = q_yaw.y();
+        odom.pose.pose.orientation.z = q_yaw.z();
+        odom.pose.pose.orientation.w = q_yaw.w();
 
         // Choose covariance matrix based on the robot's state
         if (vx == 0 && vw == 0)
@@ -230,10 +234,10 @@ private:
             // Set translation and rotation for the transform
             trans.transform.translation.x = x_pos_;
             trans.transform.translation.y = y_pos_;
-            trans.transform.rotation.x = q1;
-            trans.transform.rotation.y = q2;
-            trans.transform.rotation.z = q3;
-            trans.transform.rotation.w = q0;
+            trans.transform.rotation.x = q_yaw.x();
+            trans.transform.rotation.y = q_yaw.y();
+            trans.transform.rotation.z = q_yaw.z();
+            trans.transform.rotation.w = q_yaw.w();
 
             // Broadcast the transformation
             tf_broadcaster_->sendTransform(trans);
