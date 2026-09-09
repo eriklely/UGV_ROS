@@ -87,6 +87,14 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
         condition=LaunchConfigurationEquals('use_localization', 'emcl')
     )
+
+    nav2_emcl_delayed = TimerAction(
+        period=3.0,
+        actions=[
+            emcl_launch,
+            nav2_bringup_emcl_launch
+        ]
+    )    
     
     # Include the emcl launch description if use_localization is emcl
     emcl_launch = IncludeLaunchDescription(
@@ -105,7 +113,14 @@ def launch_setup(context, *args, **kwargs):
         }.items(),
         condition=LaunchConfigurationEquals('use_localization', 'cartographer')
     )
-    
+
+    nav2_cartographer_delayed = TimerAction(
+        period=3.0,
+        actions=[
+            nav2_bringup_cartographer_launch
+        ]
+    )
+
     # Include the robot_pose_publisher launch description
     robot_pose_publisher_launch = IncludeLaunchDescription(PythonLaunchDescriptionSource(
         [os.path.join(get_package_share_directory('robot_pose_publisher'), 'launch'),
@@ -116,10 +131,10 @@ def launch_setup(context, *args, **kwargs):
     return [
         bringup_lidar_launch,
         nav2_delayed,
-        nav2_bringup_emcl_launch,
+        nav2_emcl_delayed,
         emcl_launch,
         robot_pose_publisher_launch,
-        nav2_bringup_cartographer_launch
+        nav2_cartographer_delayed
     ]
 
 # Function to generate the launch description
