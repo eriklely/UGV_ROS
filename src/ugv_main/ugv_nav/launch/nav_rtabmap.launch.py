@@ -9,6 +9,7 @@ from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.actions import OpaqueFunction
 from launch.actions import DeclareLaunchArgument
+from launch.actions import TimerAction
 
 # Function to get the localplan config file
 def get_localplan_config_file(context):
@@ -52,7 +53,12 @@ def launch_setup(context, *args, **kwargs):
             'params_file': param_file
         }.items()
     )
-    
+
+    nav2_delayed = TimerAction(
+        period=3.0,
+        actions=[nav2_bringup_launch]
+    )
+
     # Declare the use_rviz launch argument
     use_rviz_arg = DeclareLaunchArgument('use_rviz', default_value='false',
                                      description='Whether to launch RViz2')  
@@ -78,7 +84,7 @@ def launch_setup(context, *args, **kwargs):
         use_rviz_arg,
         bringup_lidar_launch,
         robot_pose_publisher_launch,
-        nav2_bringup_launch
+        nav2_delayed
     ]
 
 # Function to generate the launch description
